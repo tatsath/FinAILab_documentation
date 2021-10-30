@@ -1,6 +1,6 @@
-## Stable Baselines Documentation
+## AI Fin Lab Documentation
 
-This folder contains documentation for the RL baselines.
+This folder contains documentation for the AI Fin Lab.
 
 
 ### Build the Documentation

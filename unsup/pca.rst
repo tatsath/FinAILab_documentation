@@ -1,11 +1,10 @@
-.. _PCA:
+.. _pca:
 
 .. automodule:: stable_baselines.acer
 
 
-Pricipal Component Analysis
-====
-
+Principal Component Analysis
+=====
  `Sample Efficient Actor-Critic with Experience Replay (ACER) <https://arxiv.org/abs/1611.01224>`_ combines
  several ideas of previous algorithms: it uses multiple workers (as A2C), implements a replay buffer (as in DQN),
  uses Retrace for Q-value estimation, importance sampling and a trust region.

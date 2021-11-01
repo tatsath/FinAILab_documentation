@@ -33,7 +33,7 @@ Key highlights of Fin AI Lab
 
 .. toctree::
   :maxdepth: 1
-  :caption: Supervised Learning Algorithms
+  :caption: Supervised Learning
 
   sup/lr
   sup/rr
@@ -47,15 +47,15 @@ Key highlights of Fin AI Lab
 
 .. toctree::
   :maxdepth: 1
-  :caption: Unsupervised - Dimensionality Reduction
+  :caption: Unsupervised-Dim Reduction
 
-  unsup/PCA
+  unsup/pca
   unsup/KernelPCA
   unsup/tsne
 
 .. toctree::
   :maxdepth: 1
-  :caption: Unsupervised - Clustering
+  :caption: Unsupervised-Clustering
 
   unsup/kmeans
   unsup/hierarchical

@@ -5,7 +5,6 @@
 
 Affinity Propagation
 ====
-
 The `Generative Adversarial Imitation Learning (GAIL) <https://arxiv.org/abs/1606.03476>`_ uses expert trajectories
 to recover a cost function and then learn a policy.
 

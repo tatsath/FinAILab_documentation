@@ -4,7 +4,7 @@
 
 
 Hierarchical
-===
+====
 `Deep Q Network (DQN) <https://arxiv.org/abs/1312.5602>`_
 and its extensions (Double-DQN, Dueling-DQN, Prioritized Experience Replay).
 

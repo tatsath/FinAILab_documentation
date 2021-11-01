@@ -4,7 +4,7 @@
 RL Baselines Zoo0
 =================
 
-`RL Baselines Zoo <https://github.com/araffin/rl-baselines-zoo>`_. is a collection of pre-trained Reinforcement Learning agents using
+`RL Baselines ZooO <https://github.com/araffin/rl-baselines-zoo>`_. is a collection of pre-trained Reinforcement Learning agents using
 Stable-Baselines.
 It also provides basic scripts for training, evaluating agents, tuning hyperparameters and recording videos.
 

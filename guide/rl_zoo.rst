@@ -1,7 +1,7 @@
 .. _rl_zoo:
 
 =================
-RL Baselines Zoo
+RL Baselines Zoo0
 =================
 
 `RL Baselines Zoo <https://github.com/araffin/rl-baselines-zoo>`_. is a collection of pre-trained Reinforcement Learning agents using

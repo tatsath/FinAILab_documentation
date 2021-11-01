@@ -91,7 +91,7 @@ To any interested in making the FinAIML better, there are still some improvement
 that need to be done.
 A full TODO list is available in the `roadmap <https://github.com/hill-a/stable-baselines/projects/1>`_.
 
-If you want to contribute, please read `CONTRIBUTING.md <https://github.com/hill-a/stable-baselines/blob/master/CONTRIBUTING.md>`_ first.
+If you want to contribute, please go through `CONTRIBUTING.md <https://github.com/hill-a/stable-baselines/blob/master/CONTRIBUTING.md>`_ first.
 
 Indices and tables
 -------------------

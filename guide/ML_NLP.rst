@@ -1,7 +1,7 @@
 .. _ML_NLP:
 
 
-Natural Language preprocessing Models
+Natural Language Processing
 ================
 
 After training an agent, you may want to deploy/use it in an other language

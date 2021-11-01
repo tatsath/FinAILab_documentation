@@ -1,7 +1,7 @@
-.. _rl_tips:
+.. _Interpretability:
 
 ======================================
-Reinforcement Learning Tips and Tricks
+Interpretability
 ======================================
 
 The aim of this section is to help you doing reinforcement learning experiments.

@@ -1,7 +1,7 @@
 .. _ML_CheatSheets:
 
 ======================================
-ML_CheatSheets
+Machine Learning Cheatsheets
 ======================================
 
 The aim of this section is to help you doing reinforcement learning experiments.

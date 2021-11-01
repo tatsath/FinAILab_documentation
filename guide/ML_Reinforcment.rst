@@ -1,7 +1,7 @@
-.. _export:
+.. _ML_Reinforcement:
 
 
-Reinforcement Learning Models
+Reinforcement Learning
 ================
 
 After training an agent, you may want to deploy/use it in an other language

@@ -1,6 +1,6 @@
 .. _ML_Model_steps:
 
-Machine Learning modeling steps
+Modeling steps
 =========
 
 A callback is a set of functions that will be called at given stages of the training procedure.

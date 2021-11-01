@@ -1,7 +1,7 @@
-.. _rl_zoo:
+.. _Python_CheatSheets:
 
 =================
-RL Baselines Zoo0
+Python Cheatsheets
 =================
 
 `RL Baselines ZooO <https://github.com/araffin/rl-baselines-zoo>`_. is a collection of pre-trained Reinforcement Learning agents using

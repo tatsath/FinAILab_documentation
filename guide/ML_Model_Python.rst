@@ -1,6 +1,6 @@
 .. _ML_Model_Python:
 
-Machine Learning modeling in python
+Python for ML and AI in Finance
 =========
 
 A callback is a set of functions that will be called at given stages of the training procedure.

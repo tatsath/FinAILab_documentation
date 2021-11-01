@@ -1,98 +1,94 @@
-.. FinAILab documentation master file, created by
-   sphinx-quickstart on Mon Nov 1.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Welcome to FinAILab! - Democratizing AI and Machine Learning in Finance
+===========================================================
 
-Fin AI Lab - Democratizing AI and ML in Finance
-========================================================================
+Welcome to the Documentation for `FinAILab <http://finailab.com/>`_. This documentation contains the information about using FinAILab for building machine learning models and concepts of Machine Learning customized to Finance.
 
-Welcome to the  Documentation for `FinAILab <http://finailab.com/>`_. This documentation contains the information abhout using FinAILab for building machine learning models and concepts of Machine Learning customized to Finance.
-
-
-.. warning::
-
-    This package is in maintenance mode, please use `Stable-Baselines3
-    (SB3)`_ for an up-to-date version. You can find a `migration guide`_ in
-    SB3 documentation.
-
-
-.. _Stable-Baselines3 (SB3): https://github.com/DLR-RM/stable-baselines3
-.. _migration guide: https://stable-baselines3.readthedocs.io/en/master/guide/migration.html
-
-Github repository: https://github.com/hill-a/stable-baselines
-
-RL Baselines Zoo (collection of pre-trained agents): https://github.com/araffin/rl-baselines-zoo
-
-RL Baselines zoo also offers a simple interface to train, evaluate agents and do hyperparameter tuning.
-
-You can read a detailed presentation of Stable Baselines in the
-Medium article: `link <https://medium.com/@araffin/stable-baselines-a-fork-of-openai-baselines-reinforcement-learning-made-easy-df87c4b2fc82>`_
-
-
-Main differences with OpenAI Baselines
+Key highlights of Fin AI Lab
 --------------------------------------
+- Cloud based python platform with ready to use algorithms, code and data.
+- Ready to use algorithm across all application of Finance and Machine Learning types
+- Plug and play master template for different machine learning type
+- Historical Prices for thousands of asset classes, macroeconomic data, fundamentals and alternative data
+- Curated projects in Machine Learning in Finance
 
-This toolset is a fork of OpenAI Baselines, with a major structural refactoring, and code cleanups:
-
-- Unified structure for all algorithms
-- PEP8 compliant (unified code style)
-- Documented functions and classes
-- More tests & more code coverage
-- Additional algorithms: SAC and TD3 (+ HER support for DQN, DDPG, SAC and TD3)
 
 
 .. toctree::
    :maxdepth: 2
-   :caption: User Guide
+   :caption: Content
 
-   guide/install
    guide/quickstart
-   guide/rl_tips
-   guide/rl
-   guide/algos
-   guide/examples
-   guide/vec_envs
-   guide/custom_env
-   guide/custom_policy
-   guide/callbacks
-   guide/tensorboard
-   guide/rl_zoo
-   guide/pretrain
-   guide/checking_nan
-   guide/save_format
-   guide/export
+   guide/AI_ML_Fin
+   guide/ML_Model_steps
+   guide/ML_Model_Python
+   guide/ANN
+   guide/ML_Sup
+   guide/ML_UnSup
+   guide/ML_Reinforcment
+   guide/ML_NLP
+   guide/Interpretability
+   guide/MasterTemplate
+   guide/ML_CheatSheets
+   guide/Python_CheatSheets
 
+
+.. toctree::
+  :maxdepth: 1
+  :caption: Supervised Learning Algorithms
+
+  modules/lr
+  modules/rr
+  modules/lr
+  modules/svm
+  modules/knn
+  modules/lda
+  modules/cart
+  modules/ensemble
+  modules/ann
+
+.. toctree::
+  :maxdepth: 1
+  :caption: Unsupervised - Dimensionality Reduction
+
+  modules/PCA
+  modules/KernelPCA
+  modules/tsne
+
+.. toctree::
+  :maxdepth: 1
+  :caption: Unsupervised - Clustering
+
+  modules/kmeans
+  modules/hierarchical
+  modules/affinity_prop
+
+.. toctree::
+  :maxdepth: 1
+  :caption: Unsupervised - Clustering
+
+  modules/kmeans
+  modules/hierarchical
+  modules/affinity_prop
 
 .. toctree::
   :maxdepth: 1
   :caption: RL Algorithms
 
-  modules/base
-  modules/policies
-  modules/a2c
-  modules/acer
-  modules/acktr
-  modules/ddpg
-  modules/dqn
-  modules/gail
-  modules/her
-  modules/ppo1
-  modules/ppo2
-  modules/sac
-  modules/td3
-  modules/trpo
+  modules/DQN
+  modules/PolicyGradient
+
+.. toctree::
+  :maxdepth: 1
+  :caption: NLP
+
+  modules/preprocessing
+  modules/feature_representation
 
 .. toctree::
   :maxdepth: 1
   :caption: Common
 
-  common/distributions
-  common/tf_utils
-  common/cmd_utils
-  common/schedules
-  common/evaluation
-  common/env_checker
-  common/monitor
+  common/ANN
 
 .. toctree::
   :maxdepth: 1
@@ -100,28 +96,13 @@ This toolset is a fork of OpenAI Baselines, with a major structural refactoring,
 
   misc/changelog
   misc/projects
-  misc/results_plotter
+  misc/visualization
 
-
-Citing Stable Baselines
------------------------
-To cite this project in publications:
-
-.. code-block:: bibtex
-
-    @misc{stable-baselines,
-      author = {Hill, Ashley and Raffin, Antonin and Ernestus, Maximilian and Gleave, Adam and Kanervisto, Anssi and Traore, Rene and Dhariwal, Prafulla and Hesse, Christopher and Klimov, Oleg and Nichol, Alex and Plappert, Matthias and Radford, Alec and Schulman, John and Sidor, Szymon and Wu, Yuhuai},
-      title = {Stable Baselines},
-      year = {2018},
-      publisher = {GitHub},
-      journal = {GitHub repository},
-      howpublished = {\url{https://github.com/hill-a/stable-baselines}},
-    }
 
 Contributing
 ------------
 
-To any interested in making the rl baselines better, there are still some improvements
+To any interested in making the FinAIML better, there are still some improvements
 that need to be done.
 A full TODO list is available in the `roadmap <https://github.com/hill-a/stable-baselines/projects/1>`_.
 

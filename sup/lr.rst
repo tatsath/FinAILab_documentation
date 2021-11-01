@@ -1,9 +1,9 @@
-.. _a2c:
+.. _lr:
 
 .. automodule:: stable_baselines.a2c
 
 
-A2C
+Linear Regression
 ====
 
 A synchronous, deterministic variant of `Asynchronous Advantage Actor Critic (A3C) <https://arxiv.org/abs/1602.01783>`_.

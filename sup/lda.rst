@@ -1,22 +1,18 @@
-.. _sac:
+.. _lda:
 
-.. automodule:: stable_baselines.sac
+.. automodule:: stable_baselines.deepq
 
 
-SAC
+Linear Discriminant Analysis
 ===
 
-`Soft Actor Critic (SAC) <https://spinningup.openai.com/en/latest/algorithms/sac.html>`_ Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor.
-
-SAC is the successor of `Soft Q-Learning SQL <https://arxiv.org/abs/1702.08165>`_ and incorporates the double Q-learning trick from TD3.
-A key feature of SAC, and a major difference with common RL algorithms, is that it is trained to maximize a trade-off between expected return and entropy, a measure of randomness in the policy.
-
+`Deep Q Network (DQN) <https://arxiv.org/abs/1312.5602>`_
+and its extensions (Double-DQN, Dueling-DQN, Prioritized Experience Replay).
 
 .. warning::
 
-  The SAC model does not support ``stable_baselines.common.policies`` because it uses double q-values
-  and value estimation, as a result it must use its own policy models (see :ref:`sac_policies`).
-
+  The DQN model does not support ``stable_baselines.common.policies``,
+  as a result it must use its own policy models (see :ref:`deepq_policies`).
 
 .. rubric:: Available Policies
 
@@ -31,21 +27,16 @@ A key feature of SAC, and a major difference with common RL algorithms, is that 
 Notes
 -----
 
-- Original paper: https://arxiv.org/abs/1801.01290
-- OpenAI Spinning Guide for SAC: https://spinningup.openai.com/en/latest/algorithms/sac.html
-- Original Implementation: https://github.com/haarnoja/sac
-- Blog post on using SAC with real robots: https://bair.berkeley.edu/blog/2018/12/14/sac/
-
-.. note::
-    In our implementation, we use an entropy coefficient (as in OpenAI Spinning or Facebook Horizon),
-    which is the equivalent to the inverse of reward scale in the original SAC paper.
-    The main reason is that it avoids having too high errors when updating the Q functions.
-
+- DQN paper: https://arxiv.org/abs/1312.5602
+- Dueling DQN: https://arxiv.org/abs/1511.06581
+- Double-Q Learning: https://arxiv.org/abs/1509.06461
+- Prioritized Experience Replay: https://arxiv.org/abs/1511.05952
 
 .. note::
 
-    The default policies for SAC differ a bit from others MlpPolicy: it uses ReLU instead of tanh activation,
-    to match the original paper
+    By default, the DQN class has double q learning and dueling extensions enabled.
+    See `Issue #406 <https://github.com/hill-a/stable-baselines/issues/406>`_ for disabling dueling.
+    To disable double-q learning, you can change the default value in the constructor.
 
 
 Can I use?
@@ -59,10 +50,10 @@ Can I use?
 ============= ====== ===========
 Space         Action Observation
 ============= ====== ===========
-Discrete      ❌      ✔️
-Box           ✔️       ✔️
-MultiDiscrete ❌      ✔️
-MultiBinary   ❌      ✔️
+Discrete      ✔️      ✔️
+Box           ❌       ✔️
+MultiDiscrete  ❌       ✔️
+MultiBinary    ❌       ✔️
 ============= ====== ===========
 
 
@@ -72,20 +63,45 @@ Example
 .. code-block:: python
 
   import gym
-  import numpy as np
 
-  from stable_baselines.sac.policies import MlpPolicy
-  from stable_baselines import SAC
+  from stable_baselines.common.vec_env import DummyVecEnv
+  from stable_baselines.deepq.policies import MlpPolicy
+  from stable_baselines import DQN
 
-  env = gym.make('Pendulum-v0')
+  env = gym.make('CartPole-v1')
 
-  model = SAC(MlpPolicy, env, verbose=1)
-  model.learn(total_timesteps=50000, log_interval=10)
-  model.save("sac_pendulum")
+  model = DQN(MlpPolicy, env, verbose=1)
+  model.learn(total_timesteps=25000)
+  model.save("deepq_cartpole")
 
   del model # remove to demonstrate saving and loading
 
-  model = SAC.load("sac_pendulum")
+  model = DQN.load("deepq_cartpole")
+
+  obs = env.reset()
+  while True:
+      action, _states = model.predict(obs)
+      obs, rewards, dones, info = env.step(action)
+      env.render()
+
+
+With Atari:
+
+.. code-block:: python
+
+  from stable_baselines.common.atari_wrappers import make_atari
+  from stable_baselines.deepq.policies import MlpPolicy, CnnPolicy
+  from stable_baselines import DQN
+
+  env = make_atari('BreakoutNoFrameskip-v4')
+
+  model = DQN(CnnPolicy, env, verbose=1)
+  model.learn(total_timesteps=25000)
+  model.save("deepq_breakout")
+
+  del model # remove to demonstrate saving and loading
+
+  model = DQN.load("deepq_breakout")
 
   obs = env.reset()
   while True:
@@ -96,14 +112,14 @@ Example
 Parameters
 ----------
 
-.. autoclass:: SAC
+.. autoclass:: DQN
   :members:
   :inherited-members:
 
-.. _sac_policies:
+.. _deepq_policies:
 
-SAC Policies
--------------
+DQN Policies
+------------
 
 .. autoclass:: MlpPolicy
   :members:
@@ -135,34 +151,33 @@ You can easily define a custom architecture for the policy network:
 
   import gym
 
-  from stable_baselines.sac.policies import FeedForwardPolicy
+  from stable_baselines.deepq.policies import FeedForwardPolicy
   from stable_baselines.common.vec_env import DummyVecEnv
-  from stable_baselines import SAC
+  from stable_baselines import DQN
 
-  # Custom MLP policy of three layers of size 128 each
-  class CustomSACPolicy(FeedForwardPolicy):
+  # Custom MLP policy of two layers of size 32 each
+  class CustomDQNPolicy(FeedForwardPolicy):
       def __init__(self, *args, **kwargs):
-          super(CustomSACPolicy, self).__init__(*args, **kwargs,
-                                             layers=[128, 128, 128],
+          super(CustomDQNPolicy, self).__init__(*args, **kwargs,
+                                             layers=[32, 32],
                                              layer_norm=False,
                                              feature_extraction="mlp")
 
   # Create and wrap the environment
-  env = gym.make('Pendulum-v0')
+  env = gym.make('LunarLander-v2')
   env = DummyVecEnv([lambda: env])
 
-  model = SAC(CustomSACPolicy, env, verbose=1)
+  model = DQN(CustomDQNPolicy, env, verbose=1)
   # Train the agent
   model.learn(total_timesteps=100000)
-
 
 
 Callbacks - Accessible Variables
 --------------------------------
 
 Depending on initialization parameters and timestep, different variables are accessible.
-Variables accessible "From timestep X" are variables that can be accessed when
-``self.timestep==X`` in the ``on_step`` function.
+Variables accessible from "timestep X" are variables that can be accessed when
+``self.timestep==X`` from the ``on_step`` function.
 
     +--------------------------------+-----------------------------------------------------+
     |Variable                        |                                         Availability|
@@ -176,34 +191,36 @@ Variables accessible "From timestep X" are variables that can be accessed when
     |- replay_wrapper                |                                                     |
     |- new_tb_log                    |                                                     |
     |- writer                        |                                                     |
-    |- current_lr                    |                                                     |
-    |- start_time                    |                                                     |
     |- episode_rewards               |                                                     |
     |- episode_successes             |                                                     |
+    |- reset                         |                                                     |
     |- obs                           |                                                     |
-    |- n_updates                     |                                                     |
-    |- infos_values                  |                                                     |
-    |- step                          |                                                     |
-    |- unscaled_action               |                                                     |
+    |- _                             |                                                     |
+    |- kwargs                        |                                                     |
+    |- update_eps                    |                                                     |
+    |- update_param_noise_threshold  |                                                     |
     |- action                        |                                                     |
+    |- env_action                    |                                                     |
     |- new_obs                       |                                                     |
-    |- reward                        |                                                     |
+    |- rew                           |                                                     |
     |- done                          |                                                     |
     |- info                          |                                                     |
     +--------------------------------+-----------------------------------------------------+
     |- obs\_                         |From timestep 2                                      |
     |- new_obs\_                     |                                                     |
     |- reward\_                      |                                                     |
-    |- maybe_ep_info                 |                                                     |
-    |- mean_reward                   |                                                     |
+    |- can_sample                    |                                                     |
+    |- mean_100ep_reward             |                                                     |
     |- num_episodes                  |                                                     |
-    +--------------------------------+-----------------------------------------------------+
-    |- mb_infos_vals                 |After timestep train_freq steps                      |
-    |- grad_step                     |                                                     |
-    +--------------------------------+-----------------------------------------------------+
-    |- frac                          |After timestep train_freq steps                      |
-    |                                |After at least batch_size and learning_starts steps  |
     +--------------------------------+-----------------------------------------------------+
     |- maybe_is_success              |After the first episode                              |
     +--------------------------------+-----------------------------------------------------+
-
+    |- obses_t                       |After at least ``max(batch_size, learning_starts)``  |
+    |- actions                       |and every `train_freq` steps                         |
+    |- rewards                       |                                                     |
+    |- obses_tp1                     |                                                     |
+    |- dones                         |                                                     |
+    |- weights                       |                                                     |
+    |- batch_idxes                   |                                                     |
+    |- td_errors                     |                                                     |
+    +--------------------------------+-----------------------------------------------------+

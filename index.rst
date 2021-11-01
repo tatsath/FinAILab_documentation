@@ -35,53 +35,45 @@ Key highlights of Fin AI Lab
   :maxdepth: 1
   :caption: Supervised Learning Algorithms
 
-  modules/lr
-  modules/rr
-  modules/lr
-  modules/svm
-  modules/knn
-  modules/lda
-  modules/cart
-  modules/ensemble
-  modules/ann
+  sup/lr
+  sup/rr
+  sup/logr
+  sup/svm
+  sup/knn
+  sup/lda
+  sup/cart
+  sup/ensemble
+  sup/ann
 
 .. toctree::
   :maxdepth: 1
   :caption: Unsupervised - Dimensionality Reduction
 
-  modules/PCA
-  modules/KernelPCA
-  modules/tsne
+  unsup/PCA
+  unsup/KernelPCA
+  unsup/tsne
 
 .. toctree::
   :maxdepth: 1
   :caption: Unsupervised - Clustering
 
-  modules/kmeans
-  modules/hierarchical
-  modules/affinity_prop
-
-.. toctree::
-  :maxdepth: 1
-  :caption: Unsupervised - Clustering
-
-  modules/kmeans
-  modules/hierarchical
-  modules/affinity_prop
+  unsup/kmeans
+  unsup/hierarchical
+  unsup/affinity_prop
 
 .. toctree::
   :maxdepth: 1
   :caption: RL Algorithms
 
-  modules/DQN
-  modules/PolicyGradient
+  rl/DQN
+  rl/PolicyGradient
 
 .. toctree::
   :maxdepth: 1
   :caption: NLP
 
-  modules/preprocessing
-  modules/feature_representation
+  NLP/preprocessing
+  NLP/feature_representation
 
 .. toctree::
   :maxdepth: 1

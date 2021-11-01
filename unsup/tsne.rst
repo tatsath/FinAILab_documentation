@@ -1,9 +1,9 @@
-.. _base_algo:
+.. _tsne:
 
 .. automodule:: stable_baselines.common.base_class
 
 
-Base RL Class
+TSNE
 =============
 
 Common interface for all the RL algorithms

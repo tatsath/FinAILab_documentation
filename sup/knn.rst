@@ -1,9 +1,9 @@
-.. _ddpg:
+.. _knn:
 
 .. automodule:: stable_baselines.ddpg
 
 
-DDPG
+K-Nearest Neighbors
 ====
 `Deep Deterministic Policy Gradient (DDPG) <https://arxiv.org/abs/1509.02971>`_
 

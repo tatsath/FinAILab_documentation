@@ -1,9 +1,9 @@
-.. _her:
+.. _ensemble:
 
 .. automodule:: stable_baselines.her
 
 
-HER
+Ensemble Models
 ====
 
 `Hindsight Experience Replay (HER) <https://arxiv.org/abs/1707.01495>`_

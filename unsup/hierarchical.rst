@@ -1,9 +1,9 @@
-.. _dqn:
+.. _hierarchical:
 
 .. automodule:: stable_baselines.deepq
 
 
-DQN
+Hierarchical
 ===
 
 `Deep Q Network (DQN) <https://arxiv.org/abs/1312.5602>`_
@@ -172,7 +172,7 @@ You can easily define a custom architecture for the policy network:
   model.learn(total_timesteps=100000)
 
 
-Callbacks - Accessible Variables 
+Callbacks - Accessible Variables
 --------------------------------
 
 Depending on initialization parameters and timestep, different variables are accessible.

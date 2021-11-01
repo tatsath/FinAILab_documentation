@@ -1,9 +1,9 @@
-.. _gail:
+.. _affinity_prop:
 
 .. automodule:: stable_baselines.gail
 
 
-GAIL
+Affinity Propagation
 ====
 
 The `Generative Adversarial Imitation Learning (GAIL) <https://arxiv.org/abs/1606.03476>`_ uses expert trajectories

@@ -1,6 +1,6 @@
 .. _quickstart:
 
-quickstart
+Getting Started
 ============
 
 Prerequisites

@@ -79,12 +79,6 @@ Key highlights of Fin AI Lab
   :maxdepth: 1
   :caption: Common
 
-  common/ANN
-
-.. toctree::
-  :maxdepth: 1
-  :caption: Misc
-
   misc/changelog
   misc/projects
   misc/visualization

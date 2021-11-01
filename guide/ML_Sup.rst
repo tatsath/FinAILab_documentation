@@ -1,6 +1,6 @@
-.. _custom_env:
+.. _ML_Sup:
 
-Using Custom Environments
+Supervised Learning
 ==========================
 
 To use the rl baselines with custom environments, they just need to follow the *gym* interface.

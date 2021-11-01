@@ -1,7 +1,7 @@
-.. _quickstart:
+.. _ML_UnSup:
 
 ===============
-Getting Started
+Unsupervised Learning
 ===============
 
 Most of the library tries to follow a sklearn-like syntax for the Reinforcement Learning algorithms.

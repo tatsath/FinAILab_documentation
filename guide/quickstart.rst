@@ -1,6 +1,6 @@
-.. _install:
+.. _quickstart:
 
-Installation
+quickstart
 ============
 
 Prerequisites

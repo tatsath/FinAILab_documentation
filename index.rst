@@ -23,7 +23,7 @@ Key highlights of Fin AI Lab
    guide/ML_Model_Python
    guide/ML_Sup
    guide/ML_UnSup
-   guide/ML_Reinforcment
+   guide/ML_Reinforcement
    guide/ML_NLP
    guide/Interpretability
    guide/MasterTemplate

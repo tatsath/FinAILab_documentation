@@ -1,253 +1,103 @@
-Dealing with NaNs and infs
-==========================
+.. _ML_NLP:
 
-During the training of a model on a given environment, it is possible that the RL model becomes completely
-corrupted when a NaN or an inf is given or returned from the RL model.
 
-How and why?
-------------
+Natural Language preprocessing Models
+================
 
-The issue arises then NaNs or infs do not crash, but simply get propagated through the training,
-until all the floating point number converge to NaN or inf. This is in line with the
-`IEEE Standard for Floating-Point Arithmetic (IEEE 754) <https://ieeexplore.ieee.org/document/4610935>`_ standard, as it says:
+After training an agent, you may want to deploy/use it in an other language
+or framework, like PyTorch or `tensorflowjs <https://github.com/tensorflow/tfjs>`_.
+Stable Baselines does not include tools to export models to other frameworks, but
+this document aims to cover parts that are required for exporting along with
+more detailed stories from users of Stable Baselines.
+
+
+Background
+----------
+
+In Stable Baselines, the controller is stored inside :ref:`policies <policies>` which convert
+observations into actions. Each learning algorithm (e.g. DQN, A2C, SAC) contains
+one or more policies, some of which are only used for training. An easy way to find
+the policy is to check the code for the ``predict`` function of the agent:
+This function should only call one policy with simple arguments.
+
+Policies hold the necessary Tensorflow placeholders and tensors to do the
+inference (i.e. predict actions), so it is enough to export these policies
+to do inference in an another framework.
 
 .. note::
-    Five possible exceptions can occur:
-        - Invalid operation (:math:`\sqrt{-1}`, :math:`\inf \times 1`, :math:`\text{NaN}\ \mathrm{mod}\ 1`, ...) return NaN
-        - Division by zero:
-            - if the operand is not zero (:math:`1/0`, :math:`-2/0`, ...) returns :math:`\pm\inf`
-            - if the operand is zero (:math:`0/0`) returns signaling NaN
-        - Overflow (exponent too high to represent) returns :math:`\pm\inf`
-        - Underflow (exponent too low to represent) returns :math:`0`
-        - Inexact (not representable exactly in base 2, eg: :math:`1/5`) returns the rounded value (ex: :code:`assert (1/5) * 3 == 0.6000000000000001`)
+  Learning algorithms also may contain other Tensorflow placeholders, that are used for training only and are
+  not required for inference.
 
-And of these, only ``Division by zero`` will signal an exception, the rest will propagate invalid values quietly.
 
-In python, dividing by zero will indeed raise the exception: ``ZeroDivisionError: float division by zero``,
-but ignores the rest.
+.. warning::
+  When using CNN policies, the observation is normalized internally (dividing by 255 to have values in [0, 1])
 
-The default in numpy, will warn: ``RuntimeWarning: invalid value encountered``
-but will not halt the code.
 
-And the worst of all, Tensorflow will not signal anything
+Export to PyTorch
+-----------------
 
-.. code-block:: python
+A known working solution is to use :func:`get_parameters <stable_baselines.common.base_class.BaseRLModel.get_parameters>`
+function to obtain model parameters, construct the network manually in PyTorch and assign parameters correctly.
 
-  import tensorflow as tf
-  import numpy as np
+.. warning::
+  PyTorch and Tensorflow have internal differences with e.g. 2D convolutions (see discussion linked below).
 
-  print("tensorflow test:")
 
-  a = tf.constant(1.0)
-  b = tf.constant(0.0)
-  c = a / b
+See `discussion #372 <https://github.com/hill-a/stable-baselines/issues/372>`_ for details.
 
-  sess = tf.Session()
-  val = sess.run(c)  # this will be quiet
-  print(val)
-  sess.close()
 
-  print("\r\nnumpy test:")
+Export to C++
+-----------------
 
-  a = np.float64(1.0)
-  b = np.float64(0.0)
-  val = a / b  # this will warn
-  print(val)
+Tensorflow, which is the backbone of Stable Baselines, is fundamentally a C/C++ library despite being most commonly accessed
+through the Python frontend layer. This design choice means that the models created at Python level should generally be
+fully compliant with the respective C++ version of Tensorflow.
 
-  print("\r\npure python test:")
+.. warning::
+   It is advisable not to mix-and-match different versions of Tensorflow libraries, particularly in terms of the state.
+   Moving computational graphs is generally more forgiving. As a matter of fact, mentioned below `PPO_CPP <https://github.com/Antymon/ppo_cpp>`_ project uses
+   graphs generated with Python Tensorflow 1.x in C++ Tensorflow 2 version.
 
-  a = 1.0
-  b = 0.0
-  val = a / b  # this will raise an exception and halt.
-  print(val)
+Stable Baselines comes very handily when hoping to migrate a computational graph and/or a state (weights) as
+the existing algorithms define most of the necessary computations for you so you don't need to recreate the core of the algorithms again.
+This is exactly the idea that has been used in the `PPO_CPP <https://github.com/Antymon/ppo_cpp>`_ project, which executes the training at the C++ level for the sake of
+computational efficiency. The graphs are exported from Stable Baselines' PPO2 implementation through ``tf.train.export_meta_graph``
+function. Alternatively, and perhaps more commonly, you could use the C++ layer only for inference. That could be useful
+as a deployment step of server backends or optimization for more limited devices.
 
-Unfortunately, most of the floating point operations are handled by Tensorflow and numpy,
-meaning you might get little to no warning when a invalid value occurs.
+.. warning::
+   As a word of caution, C++-level APIs are more imperative than their Python counterparts or more plainly speaking: cruder.
+   This is particularly apparent in Tensorflow 2.0 where the declarativeness of Autograph exists only at Python level. The
+   C++ counterpart still operates on Session objects' use, which are known from earlier versions of Tensorflow. In our use case,
+   availability of graphs utilized by Session depends on the use of ``tf.function`` decorators. However, as of November 2019, Stable Baselines still
+   uses Tensorflow 1.x in the main version which is slightly easier to use in the context of the C++ portability.
 
-Numpy parameters
-----------------
 
-Numpy has a convenient way of dealing with invalid value: `numpy.seterr <https://docs.scipy.org/doc/numpy/reference/generated/numpy.seterr.html>`_,
-which defines for the python process, how it should handle floating point error.
+Export to tensorflowjs / tfjs
+-----------------------------
 
-.. code-block:: python
+Can be done via Tensorflow's `simple_save <https://www.tensorflow.org/api_docs/python/tf/saved_model/simple_save>`_ function
+and `tensorflowjs_converter <https://www.tensorflow.org/js/tutorials/conversion/import_saved_model>`_.
 
-  import numpy as np
+See `discussion #474 <https://github.com/hill-a/stable-baselines/issues/474>`_ for details.
 
-  np.seterr(all='raise')  # define before your code.
 
-  print("numpy test:")
+Export to Java
+---------------
 
-  a = np.float64(1.0)
-  b = np.float64(0.0)
-  val = a / b  # this will now raise an exception instead of a warning.
-  print(val)
+Can be done via Tensorflow's `simple_save <https://www.tensorflow.org/api_docs/python/tf/saved_model/simple_save>`_ function.
 
-but this will also avoid overflow issues on floating point numbers:
+See `this discussion <https://github.com/hill-a/stable-baselines/issues/329>`_ for details.
 
-.. code-block:: python
 
-  import numpy as np
+Manual export
+-------------
 
-  np.seterr(all='raise')  # define before your code.
+You can also manually export required parameters (weights) and construct the
+network in your desired framework, as done with the PyTorch example above.
 
-  print("numpy overflow test:")
-
-  a = np.float64(10)
-  b = np.float64(1000)
-  val = a ** b  # this will now raise an exception
-  print(val)
-
-but will not avoid the propagation issues:
-
-.. code-block:: python
-
-  import numpy as np
-
-  np.seterr(all='raise')  # define before your code.
-
-  print("numpy propagation test:")
-
-  a = np.float64('NaN')
-  b = np.float64(1.0)
-  val = a + b  # this will neither warn nor raise anything
-  print(val)
-  
-Tensorflow parameters
----------------------
-
-Tensorflow can add checks for detecting and dealing with invalid value: `tf.add_check_numerics_ops <https://www.tensorflow.org/api_docs/python/tf/add_check_numerics_ops>`_ and `tf.check_numerics <https://www.tensorflow.org/api_docs/python/tf/debugging/check_numerics>`_,
-however they will add operations to the Tensorflow graph and raise the computation time.
-
-.. code-block:: python
-
-  import tensorflow as tf
-
-  print("tensorflow test:")
-
-  a = tf.constant(1.0)
-  b = tf.constant(0.0)
-  c = a / b
-  
-  check_nan = tf.add_check_numerics_ops()  # add after your graph definition.
-
-  sess = tf.Session()
-  val, _ = sess.run([c, check_nan])  # this will now raise an exception
-  print(val)
-  sess.close()
-
-but this will also avoid overflow issues on floating point numbers:
-
-.. code-block:: python
-
-  import tensorflow as tf
-  
-  print("tensorflow overflow test:")
-  
-  check_nan = []  # the list of check_numerics operations
-
-  a = tf.constant(10)
-  b = tf.constant(1000)
-  c = a ** b  
-  
-  check_nan.append(tf.check_numerics(c, ""))  # check the 'c' operations
-  
-  sess = tf.Session()
-  val, _ = sess.run([c] + check_nan)  # this will now raise an exception
-  print(val)
-  sess.close()
-
-and catch propagation issues:
-
-.. code-block:: python
-
-  import tensorflow as tf
-
-  print("tensorflow propagation test:")
-  
-  check_nan = []  # the list of check_numerics operations
-
-  a = tf.constant('NaN')
-  b = tf.constant(1.0)
-  c = a + b
-  
-  check_nan.append(tf.check_numerics(c, ""))  # check the 'c' operations
-  
-  sess = tf.Session()
-  val, _ = sess.run([c] + check_nan)  # this will now raise an exception
-  print(val)
-  sess.close()
-
-
-VecCheckNan Wrapper
--------------------
-
-In order to find when and from where the invalid value originated from, stable-baselines comes with a ``VecCheckNan`` wrapper.
-
-It will monitor the actions, observations, and rewards, indicating what action or observation caused it and from what.
-
-.. code-block:: python
-
-  import gym
-  from gym import spaces
-  import numpy as np
-
-  from stable_baselines import PPO2
-  from stable_baselines.common.vec_env import DummyVecEnv, VecCheckNan
-
-  class NanAndInfEnv(gym.Env):
-      """Custom Environment that raised NaNs and Infs"""
-      metadata = {'render.modes': ['human']}
-
-      def __init__(self):
-          super(NanAndInfEnv, self).__init__()
-          self.action_space = spaces.Box(low=-np.inf, high=np.inf, shape=(1,), dtype=np.float64)
-          self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(1,), dtype=np.float64)
-
-      def step(self, _action):
-          randf = np.random.rand()
-          if randf > 0.99:
-              obs = float('NaN')
-          elif randf > 0.98:
-              obs = float('inf')
-          else:
-              obs = randf
-          return [obs], 0.0, False, {}
-
-      def reset(self):
-          return [0.0]
-
-      def render(self, mode='human', close=False):
-          pass
-
-  # Create environment
-  env = DummyVecEnv([lambda: NanAndInfEnv()])
-  env = VecCheckNan(env, raise_exception=True)
-
-  # Instantiate the agent
-  model = PPO2('MlpPolicy', env)
-
-  # Train the agent
-  model.learn(total_timesteps=int(2e5))  # this will crash explaining that the invalid value originated from the environment.
-
-RL Model hyperparameters
-------------------------
-
-Depending on your hyperparameters, NaN can occurs much more often.
-A great example of this: https://github.com/hill-a/stable-baselines/issues/340
-
-Be aware, the hyperparameters given by default seem to work in most cases,
-however your environment might not play nice with them.
-If this is the case, try to read up on the effect each hyperparameters has on the model,
-so that you can try and tune them to get a stable model. Alternatively, you can try automatic hyperparameter tuning (included in the rl zoo).
-
-Missing values from datasets
-----------------------------
-
-If your environment is generated from an external dataset, do not forget to make sure your dataset does not contain NaNs.
-As some datasets will sometimes fill missing values with NaNs as a surrogate value.
-
-Here is some reading material about finding NaNs: https://pandas.pydata.org/pandas-docs/stable/user_guide/missing_data.html
-
-And filling the missing values with something else (imputation): https://towardsdatascience.com/how-to-handle-missing-data-8646b18db0d4
-
+You can access parameters of the model via agents'
+:func:`get_parameters <stable_baselines.common.base_class.BaseRLModel.get_parameters>`
+function. If you use default policies, you can find the architecture of the networks in
+source for :ref:`policies <policies>`. Otherwise, for DQN/SAC/DDPG or TD3 you need to check the `policies.py` file located
+in their respective folders.

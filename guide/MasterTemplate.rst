@@ -1,7 +1,7 @@
-.. _rl_zoo:
+.. _MasterTemplate:
 
 =================
-RL Baselines Zoo0
+Master Template
 =================
 
 `RL Baselines ZooO <https://github.com/araffin/rl-baselines-zoo>`_. is a collection of pre-trained Reinforcement Learning agents using

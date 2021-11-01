@@ -5,7 +5,6 @@
 
 TSNE
 =============
-
 Common interface for all the RL algorithms
 
 .. autoclass:: BaseRLModel

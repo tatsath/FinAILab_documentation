@@ -21,7 +21,6 @@ Key highlights of Fin AI Lab
    guide/AI_ML_Fin
    guide/ML_Model_steps
    guide/ML_Model_Python
-   guide/ANN
    guide/ML_Sup
    guide/ML_UnSup
    guide/ML_Reinforcment

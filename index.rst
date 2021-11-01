@@ -1,13 +1,12 @@
-.. Stable Baselines documentation master file, created by
-   sphinx-quickstart on Sat Aug 25 10:33:54 2018.
+.. FinAILab documentation master file, created by
+   sphinx-quickstart on Mon Nov 1.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-AI and ML in Finance Documentation - Democratizing AI and ML in Finance
+Fin AI Lab - Democratizing AI and ML in Finance
 ========================================================================
 
-`Stable Baselines <https://github.com/hill-a/stable-baselines>`_ is a set of improved implementations
-of Reinforcement Learning (RL) algorithms based on OpenAI `Baselines <https://github.com/openai/baselines>`_.
+Welcome to the  Documentation for `FinAILab <http://finailab.com/>`_. This documentation contains the information abhout using FinAILab for building machine learning models and concepts of Machine Learning customized to Finance.
 
 
 .. warning::

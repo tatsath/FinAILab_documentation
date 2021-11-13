@@ -5,11 +5,11 @@ Welcome to the Documentation for `FinAILab <http://finailab.com/>`_. This docume
 
 Key highlights of Fin AI Lab
 --------------------------------------
-- **Cloud based python platform with ready to use algorithms, code and data.**
-- **ML and AI Algorithm customised to finance** - refrain from infinite google search getting lost in the overwhelming machine learning.
-- **Plug and play master template across several ML types** - just plug in the data and build models.
-- **Free financial dataset** for thousands of asset classes, macroeconomic data, fundamentals and alternative data - refer to detailed database documentation
-- **Curated projects in Machine Learning in Finance across** all application of Finance and Machine Learning types - refer to projects
+- Cloud based python platform with ready to use algorithms, code and data
+- ML and AI Algorithm customised to finance - refrain from infinite google search getting lost in the overwhelming machine learning.
+- Plug and play master template across several ML types - just plug in the data and build models.
+- Historical Prices for thousands of asset classes, macroeconomic data, fundamentals and alternative data - refer to detailed database documentation
+- Curated projects in Machine Learning in Finance across all application of Finance and Machine Learning types - refer to projects
 
 
 

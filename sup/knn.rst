@@ -1,227 +1,101 @@
 .. _knn:
 
-.. automodule:: stable_baselines.ddpg
-
-
 K-Nearest Neighbors
-====
-`Deep Deterministic Policy Gradient (DDPG) <https://arxiv.org/abs/1509.02971>`_
+-------------------
 
-.. note::
+   *K-nearest neighbors* (KNN) is considered a “lazy learner,” as there
+   is no learning required in the model. For a new data point,
+   predictions are made by searching through the entire training set for
+   the *K* most similar instances (the neighbors) and summarizing the
+   output variable for those *K* instances.
 
-  DDPG requires :ref:`OpenMPI <openmpi>`. If OpenMPI isn't enabled, then DDPG isn't
-  imported into the ``stable_baselines`` module.
+   To determine which of the *K* instances in the training dataset are
+   most similar to a new input, a distance measure is used. The most
+   popular distance measure is *Eucli‐*
 
-.. warning::
+   *dean distance*, which is calculated as the square root of the sum of
+   the squared differ‐ ences between a point *a* and a point *b* across
+   all input attributes *i*, and which is represented as *d* (*a*, *b*)
+   = ∑\ *n* (*a* – *b* )2. Euclidean distance is a good distance meas‐
 
-  The DDPG model does not support ``stable_baselines.common.policies`` because it uses q-value instead
-  of value estimation, as a result it must use its own policy models (see :ref:`ddpg_policies`).
+   ure to use if the input variables are similar in type.
 
+   Another distance metric is *Manhattan distance*, in which the
+   distance between point
 
-.. rubric:: Available Policies
+   *a* and point *b* is represented as *d* (*a*, *b*) = ∑\ *n* \| *a* –
+   *b* \| . Manhattan distance is a good
 
-.. autosummary::
-    :nosignatures:
+   measure to use if the input variables are not similar in type. The
+   steps of KNN can be summarized as follows:
 
-    MlpPolicy
-    LnMlpPolicy
-    CnnPolicy
-    LnCnnPolicy
+1. Choose the number of *K* and a distance metric.
 
-Notes
------
+2. Find the *K*-nearest neighbors of the sample that we want to
+   classify.
 
-- Original paper: https://arxiv.org/abs/1509.02971
-- Baselines post: https://blog.openai.com/better-exploration-with-parameter-noise/
-- ``python -m stable_baselines.ddpg.main`` runs the algorithm for 1M frames = 10M timesteps
-  on a Mujoco environment. See help (``-h``) for more options.
+3. Assign the class label by majority vote.
 
-Can I use?
-----------
+..
 
--  Recurrent policies: ❌
--  Multi processing: ✔️ (using MPI)
--  Gym spaces:
+   KNN regression and classification models can be constructed using the
+   sklearn pack‐ age of Python, as shown in the following code:
 
+   Classification
 
-============= ====== ===========
-Space         Action Observation
-============= ====== ===========
-Discrete      ❌      ✔️
-Box           ✔️      ✔️
-MultiDiscrete ❌      ✔️
-MultiBinary   ❌      ✔️
-============= ====== ===========
+   from sklearn.neighbors import KNeighborsClassifier model =
+   KNeighborsClassifier()
 
+   model.fit(X, Y)
 
-Example
--------
+   Regression
 
-.. code-block:: python
+   from sklearn.neighbors import KNeighborsRegressor model =
+   KNeighborsRegressor()
 
-  import gym
-  import numpy as np
+   model.fit(X, Y)
 
-  from stable_baselines.ddpg.policies import MlpPolicy
-  from stable_baselines.common.noise import NormalActionNoise, OrnsteinUhlenbeckActionNoise, AdaptiveParamNoiseSpec
-  from stable_baselines import DDPG
+.. _hyperparameters-3:
 
-  env = gym.make('MountainCarContinuous-v0')
+Hyperparameters
+~~~~~~~~~~~~~~~
 
-  # the noise objects for DDPG
-  n_actions = env.action_space.shape[-1]
-  param_noise = None
-  action_noise = OrnsteinUhlenbeckActionNoise(mean=np.zeros(n_actions), sigma=float(0.5) * np.ones(n_actions))
+   The following key parameters are present in the sklearn
+   implementation of KNN and can be tweaked while performing the grid
+   search:
 
-  model = DDPG(MlpPolicy, env, verbose=1, param_noise=param_noise, action_noise=action_noise)
-  model.learn(total_timesteps=400000)
-  model.save("ddpg_mountain")
+   *Number of neighbors (*\ n_neighbors *in sklearn)*
 
-  del model # remove to demonstrate saving and loading
+   The most important hyperparameter for KNN is the number of neighbors
+   (n_neighbors). Good values are between 1 and 20.
 
-  model = DDPG.load("ddpg_mountain")
+   *Distance metric (*\ metric *in sklearn)*
 
-  obs = env.reset()
-  while True:
-      action, _states = model.predict(obs)
-      obs, rewards, dones, info = env.step(action)
-      env.render()
+   It may also be interesting to test different distance metrics for
+   choosing the com‐ position of the neighborhood. Good values are
+   *euclidean* and *manhattan*.
 
-Parameters
-----------
+.. _advantages-and-disadvantages-3:
 
-.. autoclass:: DDPG
-  :members:
-  :inherited-members:
+Advantages and disadvantages
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. _ddpg_policies:
+   In terms of advantages, no training is involved and hence there is no
+   learning phase. Since the algorithm requires no training before
+   making predictions, new data can be added seamlessly without
+   impacting the accuracy of the algorithm. It is intuitive and
 
-DDPG Policies
--------------
+   easy to understand. The model naturally handles multiclass
+   classification and can learn complex decision boundaries. KNN is
+   effective if the training data is large. It is also robust to noisy
+   data, and there is no need to filter the outliers.
 
-.. autoclass:: MlpPolicy
-  :members:
-  :inherited-members:
-
-
-.. autoclass:: LnMlpPolicy
-  :members:
-  :inherited-members:
-
-
-.. autoclass:: CnnPolicy
-  :members:
-  :inherited-members:
-
-
-.. autoclass:: LnCnnPolicy
-  :members:
-  :inherited-members:
-
-
-Action and Parameters Noise
----------------------------
-
-.. autoclass:: AdaptiveParamNoiseSpec
-  :members:
-  :inherited-members:
-
-.. autoclass:: NormalActionNoise
-  :members:
-  :inherited-members:
-
-.. autoclass:: OrnsteinUhlenbeckActionNoise
-  :members:
-  :inherited-members:
-
-
-Custom Policy Network
----------------------
-
-Similarly to the example given in the `examples <../guide/custom_policy.html>`_ page.
-You can easily define a custom architecture for the policy network:
-
-.. code-block:: python
-
-  import gym
-
-  from stable_baselines.ddpg.policies import FeedForwardPolicy
-  from stable_baselines import DDPG
-
-  # Custom MLP policy of two layers of size 16 each
-  class CustomDDPGPolicy(FeedForwardPolicy):
-      def __init__(self, *args, **kwargs):
-          super(CustomDDPGPolicy, self).__init__(*args, **kwargs,
-                                             layers=[16, 16],
-                                             layer_norm=False,
-                                             feature_extraction="mlp")
-
-
-  model = DDPG(CustomDDPGPolicy, 'Pendulum-v0', verbose=1)
-  # Train the agent
-  model.learn(total_timesteps=100000)
-
-
-Callbacks - Accessible Variables
---------------------------------
-
-
-Depending on initialization parameters and timestep, different variables are accessible.
-Variables accessible from "timestep X" are variables that can be accessed when ``self.timestep==X`` from the ``on_step`` function.
-
-    +--------------------------------+-----------------------------------------------------+
-    |Variable                        |                                         Availability|
-    +================================+=====================================================+
-    |- self                          |From timestep 1                                      |
-    |- total_timesteps               |                                                     |
-    |- callback                      |                                                     |
-    |- log_interval                  |                                                     |
-    |- tb_log_name                   |                                                     |
-    |- reset_num_timesteps           |                                                     |
-    |- replay_wrapper                |                                                     |
-    |- new_tb_log                    |                                                     |
-    |- writer                        |                                                     |
-    |- rank                          |                                                     |
-    |- eval_episode_rewards_history  |                                                     |
-    |- episode_rewards_history       |                                                     |
-    |- episode_successes             |                                                     |
-    |- obs                           |                                                     |
-    |- eval_obs                      |                                                     |
-    |- episode_reward                |                                                     |
-    |- episode_step                  |                                                     |
-    |- episodes                      |                                                     |
-    |- step                          |                                                     |
-    |- total_steps                   |                                                     |
-    |- start_time                    |                                                     |
-    |- epoch_episode_rewards         |                                                     |
-    |- epoch_episode_steps           |                                                     |
-    |- epoch_actor_losses            |                                                     |
-    |- epoch_critic_losses           |                                                     |
-    |- epoch_adaptive_distances      |                                                     |
-    |- eval_episode_rewards          |                                                     |
-    |- eval_qs                       |                                                     |
-    |- epoch_actions                 |                                                     |
-    |- epoch_qs                      |                                                     |
-    |- epoch_episodes                |                                                     |
-    |- epoch                         |                                                     |
-    |- action                        |                                                     |
-    |- q_value                       |                                                     |
-    |- unscaled_action               |                                                     |
-    |- new_obs                       |                                                     |
-    |- reward                        |                                                     |
-    |- done                          |                                                     |
-    |- info                          |                                                     |
-    +--------------------------------+-----------------------------------------------------+
-    |- obs\_                         |From timestep 2                                      |
-    |- new_obs\_                     |                                                     |
-    |- reward\_                      |                                                     |
-    +--------------------------------+-----------------------------------------------------+
-    |- t_train                       |After nb_rollout_steps+1                             |
-    +--------------------------------+-----------------------------------------------------+
-    |- distance                      |After                                                |
-    |                                |nb_rollout_steps*ceil(nb_rollout_steps/batch_size)```|
-    |- critic_loss                   |                                                     |
-    |- actor_loss                    |                                                     |
-    +--------------------------------+-----------------------------------------------------+
-    |- maybe_is_success              |After episode termination                            |
-    +--------------------------------+-----------------------------------------------------+
+   In terms of the disadvantages, the distance metric to choose is not
+   obvious and diffi‐ cult to justify in many cases. KNN performs poorly
+   on high dimensional datasets. It is expensive and slow to predict new
+   instances because the distance to all neighbors must be recalculated.
+   KNN is sensitive to noise in the dataset. We need to manually input
+   missing values and remove outliers. Also, feature scaling
+   (standardization and normalization) is required before applying the
+   KNN algorithm to any dataset; other‐ wise, KNN may generate wrong
+   predictions.

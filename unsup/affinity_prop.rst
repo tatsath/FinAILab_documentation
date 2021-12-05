@@ -1,135 +1,51 @@
 .. _affinity_prop:
 
-.. automodule:: stable_baselines.gail
+Affinity Propagation Clustering
+-------------------------------
 
+   *Affinity propagation* creates clusters by sending messages between
+   data points until convergence. Unlike clustering algorithms such as
+   *k*-means, affinity propagation does not require the number of
+   clusters to be determined or estimated before running the algorithm.
+   Two important parameters are used in affinity propagation to
+   determine the number of clusters: the *preference*, which controls
+   how many *exemplars* (or proto‐ types) are used; and the *damping
+   factor*, which dampens the responsibility and availa‐ bility of
+   messages to avoid numerical oscillations when updating these
+   messages.
 
-Affinity Propagation
-====
-The `Generative Adversarial Imitation Learning (GAIL) <https://arxiv.org/abs/1606.03476>`_ uses expert trajectories
-to recover a cost function and then learn a policy.
+   A dataset is described using a small number of exemplars. These are
+   members of the input set that are representative of clusters. The
+   affinity propagation algorithm takes in a set of pairwise
+   similarities between data points and finds clusters by maximizing the
+   total similarity between data points and their exemplars. The
+   messages sent between pairs represent the suitability of one sample
+   to be the exemplar of the other, which is updated in response to the
+   values from other pairs. This updating happens iteratively until
+   convergence, at which point the final exemplars are chosen, and we
+   obtain the final clustering.
 
-Learning a cost function from expert demonstrations is called Inverse Reinforcement Learning (IRL).
-The connection between GAIL and Generative Adversarial Networks (GANs) is that it uses a discriminator that tries
-to separate expert trajectory from trajectories of the learned policy, which has the role of the generator here.
+   In terms of strengths, affinity propagation does not require the
+   number of clusters to be determined before running the algorithm. The
+   algorithm is fast and can be applied to large similarity matrices.
+   However, the algorithm often converges to suboptimal solutions, and
+   at times it can fail to converge.
 
-.. note::
+.. _implementation-in-python-4:
 
-  GAIL requires :ref:`OpenMPI <openmpi>`. If OpenMPI isn't enabled, then GAIL isn't
-  imported into the ``stable_baselines`` module.
+Implementation in Python
+~~~~~~~~~~~~~~~~~~~~~~~~
 
+   The following code snippet illustrates how to implement the affinity
+   propagation algorithm for a dataset:
 
-Notes
------
+   from sklearn.cluster import AffinityPropagation
 
-- Original paper: https://arxiv.org/abs/1606.03476
+   *# Initialize the algorithm and set the number of PC's*
 
-.. warning::
+   ap = AffinityPropagation() ap.fit(X)
 
-    Images are not yet handled properly by the current implementation
-
-
-
-If you want to train an imitation learning agent
-------------------------------------------------
-
-
-Step 1: Generate expert data
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-You can either train a RL algorithm in a classic setting, use another controller (e.g. a PID controller)
-or human demonstrations.
-
-We recommend you to take a look at :ref:`pre-training <pretrain>` section
-or directly look at ``stable_baselines/gail/dataset/`` folder to learn more about the expected format for the dataset.
-
-Here is an example of training a Soft Actor-Critic model to generate expert trajectories for GAIL:
-
-
-.. code-block:: python
-
-  from stable_baselines import SAC
-  from stable_baselines.gail import generate_expert_traj
-
-  # Generate expert trajectories (train expert)
-  model = SAC('MlpPolicy', 'Pendulum-v0', verbose=1)
-  # Train for 60000 timesteps and record 10 trajectories
-  # all the data will be saved in 'expert_pendulum.npz' file
-  generate_expert_traj(model, 'expert_pendulum', n_timesteps=60000, n_episodes=10)
-
-
-
-Step 2: Run GAIL
-~~~~~~~~~~~~~~~~
-
-
-**In case you want to run Behavior Cloning (BC)**
-
-Use the ``.pretrain()`` method (cf guide).
-
-
-**Others**
-
-Thanks to the open source:
-
--  @openai/imitation
--  @carpedm20/deep-rl-tensorflow
-
-
-Can I use?
-----------
-
--  Recurrent policies: ❌
--  Multi processing: ✔️ (using MPI)
--  Gym spaces:
-
-
-============= ====== ===========
-Space         Action Observation
-============= ====== ===========
-Discrete      ✔️       ✔️
-Box           ✔️       ✔️
-MultiDiscrete ❌      ✔️
-MultiBinary   ❌      ✔️
-============= ====== ===========
-
-
-Example
--------
-
-.. code-block:: python
-
-  import gym
-
-  from stable_baselines import GAIL, SAC
-  from stable_baselines.gail import ExpertDataset, generate_expert_traj
-
-  # Generate expert trajectories (train expert)
-  model = SAC('MlpPolicy', 'Pendulum-v0', verbose=1)
-  generate_expert_traj(model, 'expert_pendulum', n_timesteps=100, n_episodes=10)
-
-  # Load the expert dataset
-  dataset = ExpertDataset(expert_path='expert_pendulum.npz', traj_limitation=10, verbose=1)
-
-  model = GAIL('MlpPolicy', 'Pendulum-v0', dataset, verbose=1)
-  # Note: in practice, you need to train for 1M steps to have a working policy
-  model.learn(total_timesteps=1000)
-  model.save("gail_pendulum")
-
-  del model # remove to demonstrate saving and loading
-
-  model = GAIL.load("gail_pendulum")
-
-  env = gym.make('Pendulum-v0')
-  obs = env.reset()
-  while True:
-    action, _states = model.predict(obs)
-    obs, rewards, dones, info = env.step(action)
-    env.render()
-
-
-Parameters
-----------
-
-.. autoclass:: GAIL
-  :members:
-  :inherited-members:
+   More details regarding the hyperparameters of affinity propagation
+   clustering can be found on the `sklearn
+   website <https://scikit-learn.org/>`__. We will look at the affinity
+   propagation technique in case studies 1 and 2 in this chapter.

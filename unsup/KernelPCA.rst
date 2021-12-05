@@ -1,134 +1,60 @@
 .. _KernelPCA:
 
-.. automodule:: stable_baselines.acktr
+Kernel Principal Component Analysis
+-----------------------------------
 
+   A main limitation of PCA is that it only applies linear
+   transformations. Kernel princi‐ pal component analysis (KPCA) extends
+   PCA to handle nonlinearity. It first maps the original data to some
+   nonlinear feature space (usually one of higher dimension). Then it
+   applies PCA to extract the principal components in that space.
 
-Kernel PCA
-=====
+   |image39|\ A simple example of when KPCA is applicable is shown in
+   `Figure 7-3 <#_bookmark522>`__. Linear trans‐ formations are suitable
+   for the blue and red data points on the left-hand plot. However, if
+   all dots are arranged as per the graph on the right, the result is
+   not line‐ arly separable. We would then need to apply KPCA to
+   separate the components.
 
-`Actor Critic using Kronecker-Factored Trust Region (ACKTR) <https://arxiv.org/abs/1708.05144>`_ uses
-Kronecker-factored approximate curvature (K-FAC) for trust region optimization.
+   *Figure 7-3. Kernel PCA*
 
+   Implementation
 
-Notes
------
+   from sklearn.decomposition import KernelPCA
 
-- Original paper: https://arxiv.org/abs/1708.05144
-- Baselines blog post: https://blog.openai.com/baselines-acktr-a2c/
-- ``python -m stable_baselines.acktr.run_atari`` runs the algorithm for 40M frames = 10M timesteps on an Atari game.
-  See help (``-h``) for more options.
+   kpca = KernelPCA(n_components=4, kernel='rbf').fit_transform(X)
 
-Can I use?
-----------
+   In the Python code, we specify kernel='rbf', which is the `radial
+   basis function ker‐ <https://oreil.ly/zCo-X>`__
+   `nel <https://oreil.ly/zCo-X>`__. This is commonly used as a kernel
+   in machine learning techniques, such as in SVMs (see `Chapter
+   4 <#Chapter_4._Supervised_Learning:_Models_a>`__).
 
--  Recurrent policies: ✔️
--  Multi processing: ✔️
--  Gym spaces:
+   Using KPCA, component separation becomes easier in a higher
+   dimensional space, as mapping into a higher dimensional space often
+   provides greater classification power.
 
+t-distributed Stochastic Neighbor Embedding
+-------------------------------------------
 
-============= ====== ===========
-Space         Action Observation
-============= ====== ===========
-Discrete      ✔️      ✔️
-Box           ✔️       ✔️
-MultiDiscrete ❌      ✔️
-MultiBinary   ❌      ✔️
-============= ====== ===========
+   t-distributed stochastic neighbor embedding (t-SNE) is a
+   dimensionality reduction algorithm that reduces the dimensions by
+   modeling the probability distribution of neighbors around each point.
+   Here, the term *neighbors* refers to the set of points clos‐ est to a
+   given point. The algorithm emphasizes keeping similar points together
+   in low dimensions as opposed to maintaining the distance between
+   points that are apart in high dimensions.
 
+   The algorithm starts by calculating the probability of similarity of
+   data points in cor‐ responding high and low dimensional space. The
+   similarity of points is calculated as the conditional probability
+   that a point *A* would choose point *B* as its neighbor if neighbors
+   were picked in proportion to their probability density under a normal
+   dis‐ tribution centered at *A*. The algorithm then tries to minimize
+   the difference between these conditional probabilities (or
+   similarities) in the high and low dimensional spaces for a perfect
+   representation of data points in the low dimensional space.
 
-Example
--------
+   Implementation
 
-.. code-block:: python
-
-  import gym
-
-  from stable_baselines.common.policies import MlpPolicy, MlpLstmPolicy, MlpLnLstmPolicy
-  from stable_baselines.common import make_vec_env
-  from stable_baselines import ACKTR
-
-  # multiprocess environment
-  env = make_vec_env('CartPole-v1', n_envs=4)
-
-  model = ACKTR(MlpPolicy, env, verbose=1)
-  model.learn(total_timesteps=25000)
-  model.save("acktr_cartpole")
-
-  del model # remove to demonstrate saving and loading
-
-  model = ACKTR.load("acktr_cartpole")
-
-  obs = env.reset()
-  while True:
-      action, _states = model.predict(obs)
-      obs, rewards, dones, info = env.step(action)
-      env.render()
-
-
-Parameters
-----------
-
-.. autoclass:: ACKTR
-  :members:
-  :inherited-members:
-
-
-
-
-Callbacks - Accessible Variables
---------------------------------
-
-Depending on initialization parameters and timestep, different variables are accessible.
-Variables accessible from "timestep X" are variables that can be accessed when
-``self.timestep==X`` from the ``on_step`` function.
-
-    +--------------------------------+-----------------------------------------------------+
-    |Variable                        |                                         Availability|
-    +================================+=====================================================+
-    |- self                          |From timestep 1                                      |
-    |- total_timesteps               |                                                     |
-    |- callback                      |                                                     |
-    |- log_interval                  |                                                     |
-    |- tb_log_name                   |                                                     |
-    |- reset_num_timesteps           |                                                     |
-    |- new_tb_log                    |                                                     |
-    |- writer                        |                                                     |
-    |- tf_vars                       |                                                     |
-    |- is_uninitialized              |                                                     |
-    |- new_uninitialized_vars        |                                                     |
-    |- t_start                       |                                                     |
-    |- coord                         |                                                     |
-    |- enqueue_threads               |                                                     |
-    |- old_uninitialized_vars        |                                                     |
-    |- mb_obs                        |                                                     |
-    |- mb_rewards                    |                                                     |
-    |- mb_actions                    |                                                     |
-    |- mb_values                     |                                                     |
-    |- mb_dones                      |                                                     |
-    |- mb_states                     |                                                     |
-    |- ep_infos                      |                                                     |
-    |- _                             |                                                     |
-    |- actions                       |                                                     |
-    |- values                        |                                                     |
-    |- states                        |                                                     |
-    |- clipped_actions               |                                                     |
-    |- obs                           |                                                     |
-    |- rewards                       |                                                     |
-    |- dones                         |                                                     |
-    |- infos                         |                                                     |
-    +--------------------------------+-----------------------------------------------------+
-    |- info                          |From timestep 2                                      |
-    |- maybe_ep_info                 |                                                     |
-    +--------------------------------+-----------------------------------------------------+
-    |- update                        |From timestep ``n_steps+1``                          |
-    |- rollout                       |                                                     |
-    |- returns                       |                                                     |
-    |- masks                         |                                                     |
-    |- true_reward                   |                                                     |
-    +--------------------------------+-----------------------------------------------------+
-    |- policy_loss                   |From timestep ``2*n_steps+1``                        |
-    |- value_loss                    |                                                     |
-    |- policy_entropy                |                                                     |
-    |- n_seconds                     |                                                     |
-    |- fps                           |                                                     |
-    +--------------------------------+-----------------------------------------------------+
+   from sklearn.manifold import TSNE X_tsne = TSNE().fit_transform(X)

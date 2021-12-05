@@ -1,227 +1,89 @@
 .. _kmeans:
 
-.. automodule:: stable_baselines.ddpg
+k-means Clustering
+------------------
 
+   *k*-means is the most well-known clustering technique. The algorithm
+   of *k*-means aims to find and group data points into classes that
+   have high similarity between them. This similarity is understood as
+   the opposite of the distance between data points. The closer the data
+   points are, the more likely they are to belong to the same cluster.
 
-K-means
-====
-`Deep Deterministic Policy Gradient (DDPG) <https://arxiv.org/abs/1509.02971>`_
+   The algorithm finds *k* centroids and assigns each data point to
+   exactly one cluster with the goal of minimizing the within-cluster
+   variance (called *inertia*). It typically uses the Euclidean distance
+   (ordinary distance between two points), but other dis‐ tance metrics
+   can be used. The *k*-means algorithm delivers a local optimum for a
+   given *k* and proceeds as follows:
 
-.. note::
+1. This algorithm specifies the number of clusters.
 
-  DDPG requires :ref:`OpenMPI <openmpi>`. If OpenMPI isn't enabled, then DDPG isn't
-  imported into the ``stable_baselines`` module.
+2. Data points are randomly selected as cluster centers.
 
-.. warning::
+3. Each data point is assigned to the cluster center it is nearest to.
 
-  The DDPG model does not support ``stable_baselines.common.policies`` because it uses q-value instead
-  of value estimation, as a result it must use its own policy models (see :ref:`ddpg_policies`).
+4. Cluster centers are updated to the mean of the assigned points.
 
+5. Steps 3–4 are repeated until all cluster centers remain unchanged.
 
-.. rubric:: Available Policies
+..
 
-.. autosummary::
-    :nosignatures:
+   In simple terms, we randomly move around the specified number of
+   centroids in each iteration, assigning each data point to the closest
+   centroid. Once we have done that, we calculate the mean distance of
+   all points in each centroid. Then, once we can no longer reduce the
+   minimum distance from data points to their respective cent‐ roids, we
+   have found our clusters.
 
-    MlpPolicy
-    LnMlpPolicy
-    CnnPolicy
-    LnCnnPolicy
+k-means hyperparameters
+~~~~~~~~~~~~~~~~~~~~~~~
 
-Notes
------
+   The *k*-means hyperparameters include:
 
-- Original paper: https://arxiv.org/abs/1509.02971
-- Baselines post: https://blog.openai.com/better-exploration-with-parameter-noise/
-- ``python -m stable_baselines.ddpg.main`` runs the algorithm for 1M frames = 10M timesteps
-  on a Mujoco environment. See help (``-h``) for more options.
+   *Number of clusters*
 
-Can I use?
-----------
+   The number of clusters and centroids to generate.
 
--  Recurrent policies: ❌
--  Multi processing: ✔️ (using MPI)
--  Gym spaces:
+   *Maximum iterations*
 
+   Maximum iterations of the algorithm for a single run.
 
-============= ====== ===========
-Space         Action Observation
-============= ====== ===========
-Discrete      ❌      ✔️
-Box           ✔️      ✔️
-MultiDiscrete ❌      ✔️
-MultiBinary   ❌      ✔️
-============= ====== ===========
+   *Number initial*
 
+   The number of times the algorithm will be run with different centroid
+   seeds. The final result will be the best output of the defined number
+   of consecutive runs, in terms of inertia.
 
-Example
--------
+   With *k*-means, different random starting points for the cluster
+   centers often result in very different clustering solutions.
+   Therefore, the *k*-means algorithm is run in sklearn with at least 10
+   different random initializations, and the solution occurring the
+   great‐ est number of times is chosen.
 
-.. code-block:: python
+   The strengths of *k*-means include its simplicity, wide range of
+   applicability, fast con‐ vergence, and linear scalability to large
+   data while producing clusters of an even size. It is most useful when
+   we know the exact number of clusters, *k*, beforehand. In fact, a
+   main weakness of *k*-means is having to tune this hyperparameter.
+   Additional draw‐ backs include the lack of a guarantee to find a
+   global optimum and its sensitivity to outliers.
 
-  import gym
-  import numpy as np
+.. _implementation-in-python-2:
 
-  from stable_baselines.ddpg.policies import MlpPolicy
-  from stable_baselines.common.noise import NormalActionNoise, OrnsteinUhlenbeckActionNoise, AdaptiveParamNoiseSpec
-  from stable_baselines import DDPG
+Implementation in Python
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-  env = gym.make('MountainCarContinuous-v0')
+   Python’s sklearn library offers a powerful implementation of
+   *k*-means. The following code snippet illustrates how to apply
+   *k*-means clustering on a dataset:
 
-  # the noise objects for DDPG
-  n_actions = env.action_space.shape[-1]
-  param_noise = None
-  action_noise = OrnsteinUhlenbeckActionNoise(mean=np.zeros(n_actions), sigma=float(0.5) * np.ones(n_actions))
+   from sklearn.cluster import KMeans
 
-  model = DDPG(MlpPolicy, env, verbose=1, param_noise=param_noise, action_noise=action_noise)
-  model.learn(total_timesteps=400000)
-  model.save("ddpg_mountain")
+   *#Fit with k-means*
 
-  del model # remove to demonstrate saving and loading
+   k_means = KMeans(n_clusters=nclust) k_means.fit(X)
 
-  model = DDPG.load("ddpg_mountain")
-
-  obs = env.reset()
-  while True:
-      action, _states = model.predict(obs)
-      obs, rewards, dones, info = env.step(action)
-      env.render()
-
-Parameters
-----------
-
-.. autoclass:: DDPG
-  :members:
-  :inherited-members:
-
-.. _ddpg_policies:
-
-DDPG Policies
--------------
-
-.. autoclass:: MlpPolicy
-  :members:
-  :inherited-members:
-
-
-.. autoclass:: LnMlpPolicy
-  :members:
-  :inherited-members:
-
-
-.. autoclass:: CnnPolicy
-  :members:
-  :inherited-members:
-
-
-.. autoclass:: LnCnnPolicy
-  :members:
-  :inherited-members:
-
-
-Action and Parameters Noise
----------------------------
-
-.. autoclass:: AdaptiveParamNoiseSpec
-  :members:
-  :inherited-members:
-
-.. autoclass:: NormalActionNoise
-  :members:
-  :inherited-members:
-
-.. autoclass:: OrnsteinUhlenbeckActionNoise
-  :members:
-  :inherited-members:
-
-
-Custom Policy Network
----------------------
-
-Similarly to the example given in the `examples <../guide/custom_policy.html>`_ page.
-You can easily define a custom architecture for the policy network:
-
-.. code-block:: python
-
-  import gym
-
-  from stable_baselines.ddpg.policies import FeedForwardPolicy
-  from stable_baselines import DDPG
-
-  # Custom MLP policy of two layers of size 16 each
-  class CustomDDPGPolicy(FeedForwardPolicy):
-      def __init__(self, *args, **kwargs):
-          super(CustomDDPGPolicy, self).__init__(*args, **kwargs,
-                                             layers=[16, 16],
-                                             layer_norm=False,
-                                             feature_extraction="mlp")
-
-
-  model = DDPG(CustomDDPGPolicy, 'Pendulum-v0', verbose=1)
-  # Train the agent
-  model.learn(total_timesteps=100000)
-
-
-Callbacks - Accessible Variables
---------------------------------
-
-
-Depending on initialization parameters and timestep, different variables are accessible.
-Variables accessible from "timestep X" are variables that can be accessed when ``self.timestep==X`` from the ``on_step`` function.
-
-    +--------------------------------+-----------------------------------------------------+
-    |Variable                        |                                         Availability|
-    +================================+=====================================================+
-    |- self                          |From timestep 1                                      |
-    |- total_timesteps               |                                                     |
-    |- callback                      |                                                     |
-    |- log_interval                  |                                                     |
-    |- tb_log_name                   |                                                     |
-    |- reset_num_timesteps           |                                                     |
-    |- replay_wrapper                |                                                     |
-    |- new_tb_log                    |                                                     |
-    |- writer                        |                                                     |
-    |- rank                          |                                                     |
-    |- eval_episode_rewards_history  |                                                     |
-    |- episode_rewards_history       |                                                     |
-    |- episode_successes             |                                                     |
-    |- obs                           |                                                     |
-    |- eval_obs                      |                                                     |
-    |- episode_reward                |                                                     |
-    |- episode_step                  |                                                     |
-    |- episodes                      |                                                     |
-    |- step                          |                                                     |
-    |- total_steps                   |                                                     |
-    |- start_time                    |                                                     |
-    |- epoch_episode_rewards         |                                                     |
-    |- epoch_episode_steps           |                                                     |
-    |- epoch_actor_losses            |                                                     |
-    |- epoch_critic_losses           |                                                     |
-    |- epoch_adaptive_distances      |                                                     |
-    |- eval_episode_rewards          |                                                     |
-    |- eval_qs                       |                                                     |
-    |- epoch_actions                 |                                                     |
-    |- epoch_qs                      |                                                     |
-    |- epoch_episodes                |                                                     |
-    |- epoch                         |                                                     |
-    |- action                        |                                                     |
-    |- q_value                       |                                                     |
-    |- unscaled_action               |                                                     |
-    |- new_obs                       |                                                     |
-    |- reward                        |                                                     |
-    |- done                          |                                                     |
-    |- info                          |                                                     |
-    +--------------------------------+-----------------------------------------------------+
-    |- obs\_                         |From timestep 2                                      |
-    |- new_obs\_                     |                                                     |
-    |- reward\_                      |                                                     |
-    +--------------------------------+-----------------------------------------------------+
-    |- t_train                       |After nb_rollout_steps+1                             |
-    +--------------------------------+-----------------------------------------------------+
-    |- distance                      |After                                                |
-    |                                |nb_rollout_steps*ceil(nb_rollout_steps/batch_size)```|
-    |- critic_loss                   |                                                     |
-    |- actor_loss                    |                                                     |
-    +--------------------------------+-----------------------------------------------------+
-    |- maybe_is_success              |After episode termination                            |
-    +--------------------------------+-----------------------------------------------------+
+   The number of clusters is the key hyperparameter to be tuned. We will
+   look at the *k*- means clustering technique in case studies 1 and 2
+   of this chapter, in which further details on choosing the right
+   number of clusters and detailed visualizations are provided.

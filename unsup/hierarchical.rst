@@ -1,225 +1,93 @@
 .. _hierarchical:
 
-.. automodule:: stable_baselines.deepq
+Hierarchical Clustering
+-----------------------
 
+   *Hierarchical clustering* involves creating clusters that have a
+   predominant ordering from top to bottom. The main advantage of
+   hierarchical clustering is that we do not need to specify the number
+   of clusters; the model determines that by itself. This
 
-Hierarchical
-====
-`Deep Q Network (DQN) <https://arxiv.org/abs/1312.5602>`_
-and its extensions (Double-DQN, Dueling-DQN, Prioritized Experience Replay).
+   clustering technique is divided into two types: agglomerative
+   hierarchical clustering and divisive hierarchical clustering.
 
-.. warning::
+   *Agglomerative hierarchical clustering* is the most common type of
+   hierarchical cluster‐ ing and is used to group objects based on their
+   similarity. It is a “bottom-up” approach where each observation
+   starts in its own cluster, and pairs of clusters are merged as one
+   moves up the hierarchy. The agglomerative hierarchical clustering
+   algorithm delivers a *local optimum* and proceeds as follows:
 
-  The DQN model does not support ``stable_baselines.common.policies``,
-  as a result it must use its own policy models (see :ref:`deepq_policies`).
+1. Make each data point a single-point cluster and form *N* clusters.
 
-.. rubric:: Available Policies
+2. Take the two closest data points and combine them, leaving *N-1*
+   clusters.
 
-.. autosummary::
-    :nosignatures:
+3. Take the two closest clusters and combine them, forming *N-2*
+   clusters.
 
-    MlpPolicy
-    LnMlpPolicy
-    CnnPolicy
-    LnCnnPolicy
+4. Repeat step 3 until left with only one cluster.
 
-Notes
------
+..
 
-- DQN paper: https://arxiv.org/abs/1312.5602
-- Dueling DQN: https://arxiv.org/abs/1511.06581
-- Double-Q Learning: https://arxiv.org/abs/1509.06461
-- Prioritized Experience Replay: https://arxiv.org/abs/1511.05952
+   *Divisive hierarchical clustering* works “top-down” and sequentially
+   splits the remain‐ ing clusters to produce the most distinct
+   subgroups.
 
-.. note::
+   Both produce *N-1* hierarchical levels and facilitate the clustering
+   creation at the level that best partitions data into homogeneous
+   groups. We will focus on the more com‐ mon agglomerative clustering
+   approach.
 
-    By default, the DQN class has double q learning and dueling extensions enabled.
-    See `Issue #406 <https://github.com/hill-a/stable-baselines/issues/406>`_ for disabling dueling.
-    To disable double-q learning, you can change the default value in the constructor.
+   Hierarchical clustering enables the plotting of *dendrograms*, which
+   are visualizations of a binary hierarchical clustering. A dendrogram
+   is a type of tree diagram showing hierarchical relationships between
+   different sets of data. They provide an interesting and informative
+   visualization of hierarchical clustering results. A dendrogram con‐
+   tains the memory of the hierarchical clustering algorithm, so you can
+   tell how the cluster is formed simply by inspecting the chart.
 
+   `Figure 8-1 <#_bookmark585>`__ shows an example of dendrograms based
+   on hierarchical clustering. The distance between data points
+   represents dissimilarities, and the height of the blocks represents
+   the distance between clusters.
 
-Can I use?
-----------
+   Observations that fuse at the bottom are similar, while those at the
+   top are quite dif‐ ferent. With dendrograms, conclusions are made
+   based on the location of the vertical axis rather than on the
+   horizontal one.
 
--  Recurrent policies: ❌
--  Multi processing: ❌
--  Gym spaces:
+   The advantages of hierarchical clustering are that it is easy to
+   implement it, does not require one to specify the number of clusters,
+   and it produces dendrograms that are very useful in understanding the
+   data. However, the time complexity for hierarchical clustering can
+   result in long computation times relative to other algorithms, such
+   as *k*-means. If we have a large dataset, it can be difficult to
+   determine the correct num‐ ber of clusters by looking at the
+   dendrogram. Hierarchical clustering is very sensitive to outliers,
+   and in their presence, model performance decreases significantly.
 
+   |image41|
 
-============= ====== ===========
-Space         Action Observation
-============= ====== ===========
-Discrete      ✔️      ✔️
-Box           ❌       ✔️
-MultiDiscrete  ❌       ✔️
-MultiBinary    ❌       ✔️
-============= ====== ===========
+   *Figure 8-1. Hierarchical clustering*
 
+.. _implementation-in-python-3:
 
-Example
--------
+Implementation in Python
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: python
+   The following code snippet illustrates how to apply agglomerative
+   hierarchical clus‐ tering with four clusters on a dataset:
 
-  import gym
+   from sklearn.cluster import AgglomerativeClustering
 
-  from stable_baselines.common.vec_env import DummyVecEnv
-  from stable_baselines.deepq.policies import MlpPolicy
-  from stable_baselines import DQN
+   model = AgglomerativeClustering(n_clusters=4, affinity='euclidean',\\
+   linkage='ward')
 
-  env = gym.make('CartPole-v1')
+   clust_labels1 = model.fit_predict(X)
 
-  model = DQN(MlpPolicy, env, verbose=1)
-  model.learn(total_timesteps=25000)
-  model.save("deepq_cartpole")
-
-  del model # remove to demonstrate saving and loading
-
-  model = DQN.load("deepq_cartpole")
-
-  obs = env.reset()
-  while True:
-      action, _states = model.predict(obs)
-      obs, rewards, dones, info = env.step(action)
-      env.render()
-
-
-With Atari:
-
-.. code-block:: python
-
-  from stable_baselines.common.atari_wrappers import make_atari
-  from stable_baselines.deepq.policies import MlpPolicy, CnnPolicy
-  from stable_baselines import DQN
-
-  env = make_atari('BreakoutNoFrameskip-v4')
-
-  model = DQN(CnnPolicy, env, verbose=1)
-  model.learn(total_timesteps=25000)
-  model.save("deepq_breakout")
-
-  del model # remove to demonstrate saving and loading
-
-  model = DQN.load("deepq_breakout")
-
-  obs = env.reset()
-  while True:
-      action, _states = model.predict(obs)
-      obs, rewards, dones, info = env.step(action)
-      env.render()
-
-Parameters
-----------
-
-.. autoclass:: DQN
-  :members:
-  :inherited-members:
-
-.. _deepq_policies:
-
-DQN Policies
-------------
-
-.. autoclass:: MlpPolicy
-  :members:
-  :inherited-members:
-
-
-.. autoclass:: LnMlpPolicy
-  :members:
-  :inherited-members:
-
-
-.. autoclass:: CnnPolicy
-  :members:
-  :inherited-members:
-
-
-.. autoclass:: LnCnnPolicy
-  :members:
-  :inherited-members:
-
-
-Custom Policy Network
----------------------
-
-Similarly to the example given in the `examples <../guide/custom_policy.html>`_ page.
-You can easily define a custom architecture for the policy network:
-
-.. code-block:: python
-
-  import gym
-
-  from stable_baselines.deepq.policies import FeedForwardPolicy
-  from stable_baselines.common.vec_env import DummyVecEnv
-  from stable_baselines import DQN
-
-  # Custom MLP policy of two layers of size 32 each
-  class CustomDQNPolicy(FeedForwardPolicy):
-      def __init__(self, *args, **kwargs):
-          super(CustomDQNPolicy, self).__init__(*args, **kwargs,
-                                             layers=[32, 32],
-                                             layer_norm=False,
-                                             feature_extraction="mlp")
-
-  # Create and wrap the environment
-  env = gym.make('LunarLander-v2')
-  env = DummyVecEnv([lambda: env])
-
-  model = DQN(CustomDQNPolicy, env, verbose=1)
-  # Train the agent
-  model.learn(total_timesteps=100000)
-
-
-Callbacks - Accessible Variables
---------------------------------
-
-Depending on initialization parameters and timestep, different variables are accessible.
-Variables accessible from "timestep X" are variables that can be accessed when
-``self.timestep==X`` from the ``on_step`` function.
-
-    +--------------------------------+-----------------------------------------------------+
-    |Variable                        |                                         Availability|
-    +================================+=====================================================+
-    |- self                          |From timestep 1                                      |
-    |- total_timesteps               |                                                     |
-    |- callback                      |                                                     |
-    |- log_interval                  |                                                     |
-    |- tb_log_name                   |                                                     |
-    |- reset_num_timesteps           |                                                     |
-    |- replay_wrapper                |                                                     |
-    |- new_tb_log                    |                                                     |
-    |- writer                        |                                                     |
-    |- episode_rewards               |                                                     |
-    |- episode_successes             |                                                     |
-    |- reset                         |                                                     |
-    |- obs                           |                                                     |
-    |- _                             |                                                     |
-    |- kwargs                        |                                                     |
-    |- update_eps                    |                                                     |
-    |- update_param_noise_threshold  |                                                     |
-    |- action                        |                                                     |
-    |- env_action                    |                                                     |
-    |- new_obs                       |                                                     |
-    |- rew                           |                                                     |
-    |- done                          |                                                     |
-    |- info                          |                                                     |
-    +--------------------------------+-----------------------------------------------------+
-    |- obs\_                         |From timestep 2                                      |
-    |- new_obs\_                     |                                                     |
-    |- reward\_                      |                                                     |
-    |- can_sample                    |                                                     |
-    |- mean_100ep_reward             |                                                     |
-    |- num_episodes                  |                                                     |
-    +--------------------------------+-----------------------------------------------------+
-    |- maybe_is_success              |After the first episode                              |
-    +--------------------------------+-----------------------------------------------------+
-    |- obses_t                       |After at least ``max(batch_size, learning_starts)``  |
-    |- actions                       |and every `train_freq` steps                         |
-    |- rewards                       |                                                     |
-    |- obses_tp1                     |                                                     |
-    |- dones                         |                                                     |
-    |- weights                       |                                                     |
-    |- batch_idxes                   |                                                     |
-    |- td_errors                     |                                                     |
-    +--------------------------------+-----------------------------------------------------+
+   More details regarding the hyperparameters of agglomerative
+   hierarchical clustering can be found on the `sklearn
+   website <https://scikit-learn.org/>`__. We will look at the
+   hierarchical clustering tech‐ nique in case studies 1 and 3 in this
+   chapter.

@@ -1,47 +1,40 @@
 .. _ML_UnSup:
 
-===============
-Unsupervised Learning
-===============
+Unsupervised
+------------
 
-Most of the library tries to follow a sklearn-like syntax for the Reinforcement Learning algorithms.
+   Unsupervised learning is a type of machine learning used to draw
+   inferences from datasets consisting of input data without labeled
+   responses. There are two types of unsupervised learning:
+   dimensionality reduction and clustering.
 
-Here is a quick example of how to train and run PPO2 on a cartpole environment:
+Dimensionality reduction
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: python
+   *Dimensionality reduction* is the process of reducing the number of
+   features, or vari‐ ables, in a dataset while preserving information
+   and overall model performance. It is a common and powerful way to
+   deal with datasets that have a large number of dimensions.
 
-  import gym
+   |image3|\ `Figure 1-4 <#_bookmark46>`__ illustrates this concept,
+   where the dimension of data is converted from two dimensions (*X\ 1*
+   and *X\ 2*) to one dimension (*Z\ 1*). *Z\ 1* conveys similar
+   information embedded in *X\ 1* and *X\ 2* and reduces the dimension
+   of the data.
 
-  from stable_baselines.common.policies import MlpPolicy
-  from stable_baselines.common.vec_env import DummyVecEnv
-  from stable_baselines import PPO2
+   *Figure 1-4. Dimensionality reduction*
 
-  env = gym.make('CartPole-v1')
-  # Optional: PPO2 requires a vectorized environment to run
-  # the env is now wrapped automatically when passing it to the constructor
-  # env = DummyVecEnv([lambda: env])
+Clustering
+~~~~~~~~~~
 
-  model = PPO2(MlpPolicy, env, verbose=1)
-  model.learn(total_timesteps=10000)
+   *Clustering* is a subcategory of unsupervised learning techniques
+   that allows us to dis‐ cover hidden structures in data. The goal of
+   clustering is to find a natural grouping in data so that items in the
+   same cluster are more similar to each other than to those from
+   different clusters.
 
-  obs = env.reset()
-  for i in range(1000):
-      action, _states = model.predict(obs)
-      obs, rewards, dones, info = env.step(action)
-      env.render()
+   |image4|\ An example of clustering is shown in `Figure
+   1-5 <#_bookmark48>`__, where we can see the entire data clustered
+   into two distinct groups by the clustering algorithm.
 
-
-Or just train a model with a one liner if
-`the environment is registered in Gym <https://github.com/openai/gym/wiki/Environments>`_ and if
-`the policy is registered <custom_policy.html>`_:
-
-.. code-block:: python
-
-    from stable_baselines import PPO2
-
-    model = PPO2('MlpPolicy', 'CartPole-v1').learn(10000)
-
-
-.. figure:: https://cdn-images-1.medium.com/max/960/1*R_VMmdgKAY0EDhEjHVelzw.gif
-
-  Define and train a RL agent in one line of code!
+   *Figure 1-5. Clustering*

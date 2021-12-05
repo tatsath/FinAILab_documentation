@@ -1,127 +1,141 @@
 .. _lr:
 
-.. automodule:: stable_baselines.a2c
 
 
-Linear Regression
-====
+Linear Regression (Ordinary Least Squares)
+------------------------------------------
 
-A synchronous, deterministic variant of `Asynchronous Advantage Actor Critic (A3C) <https://arxiv.org/abs/1602.01783>`_.
-It uses multiple workers to avoid the use of a replay buffer.
+   *Linear regression* (Ordinary Least Squares Regression or OLS
+   Regression) is perhaps one of the most well-known and best-understood
+   algorithms in statistics and machine learning. Linear regression is a
+   linear model, e.g., a model that assumes a linear relationship
+   between the input variables (*x*) and the single output variable
+   (*y*). The goal of linear regression is to train a linear model to
+   predict a new *y* given a pre‐ viously unseen *x* with as little
+   error as possible.
 
+   Our model will be a function that predicts *y* given *x*\ :sub:`1`,
+   *x*\ :sub:`2`...\ *x\ i*:
 
-Notes
------
+   *y* = *β*\ :sub:`0` + *β*\ :sub:`1`\ *x*\ :sub:`1` + ... + *β\ i
+   x\ i*
 
--  Original paper:  https://arxiv.org/abs/1602.01783
--  OpenAI blog post: https://openai.com/blog/baselines-acktr-a2c/
--  ``python -m stable_baselines.a2c.run_atari`` runs the algorithm for 40M
-   frames = 10M timesteps on an Atari game. See help (``-h``) for more
-   options.
--  ``python -m stable_baselines.a2c.run_mujoco`` runs the algorithm for 1M
-   frames on a Mujoco environment.
+   where, *β*\ :sub:`0` is called intercept and *β*\ :sub:`1`...\ *β\ i*
+   are the coefficient of the regression.
 
-Can I use?
-----------
+Implementation in Python
+~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Recurrent policies: ✔️
--  Multi processing: ✔️
--  Gym spaces:
+   from sklearn.linear_model import LinearRegression model =
+   LinearRegression()
 
+   model.fit(X, Y)
 
-============= ====== ===========
-Space         Action Observation
-============= ====== ===========
-Discrete      ✔️      ✔️
-Box           ✔️      ✔️
-MultiDiscrete ✔️      ✔️
-MultiBinary   ✔️      ✔️
-============= ====== ===========
+   In the following section, we cover the training of a linear
+   regression model and grid search of the model. However, the overall
+   concepts and related approaches are appli‐ cable to all other
+   supervised learning models.
 
+Training a model
+~~~~~~~~~~~~~~~~
 
-Example
--------
+   As we mentioned in `Chapter
+   3 <#Chapter_3._Artificial_Neural_Networks>`__, training a model
+   basically means retrieving the model parameters by minimizing the
+   cost (loss) function. The two steps for training a linear regression
+   model are:
 
-Train a A2C agent on `CartPole-v1` using 4 processes.
+   *Define a cost function (or loss function)*
 
-.. code-block:: python
+   Measures how inaccurate the model’s predictions are. The *sum of
+   squared residu‐ als (RSS)* as defined in `Equation
+   4-1 <#_bookmark196>`__ measures the squared sum of the difference
+   between the actual and predicted value and is the cost function for
+   linear regression.
 
-  import gym
+   *Equation 4-1. Sum of squared residuals*
 
-  from stable_baselines.common.policies import MlpPolicy
-  from stable_baselines.common import make_vec_env
-  from stable_baselines import A2C
+   *n n* 2
 
-  # Parallel environments
-  env = make_vec_env('CartPole-v1', n_envs=4)
+   *RSS* = ∑ (*y\ i* – *β*\ :sub:`0` – ∑ *β\ j x\ ij*)
 
-  model = A2C(MlpPolicy, env, verbose=1)
-  model.learn(total_timesteps=25000)
-  model.save("a2c_cartpole")
+   *i*\ =1 *j*\ =1
 
-  del model # remove to demonstrate saving and loading
+   In this equation, *β*\ :sub:`0` is the intercept; *β\ j* represents
+   the coefficient; *β*\ :sub:`1`, .., *β\ j* are the coefficients of
+   the regression; and *x\ ij* represents the *i th* observation and *j
+   th* variable.
 
-  model = A2C.load("a2c_cartpole")
+   *Find the parameters that minimize loss*
 
-  obs = env.reset()
-  while True:
-      action, _states = model.predict(obs)
-      obs, rewards, dones, info = env.step(action)
-      env.render()
+   |image22|\ For example, make our model as accurate as possible.
+   Graphically, in two dimen‐ sions, this results in a line of best fit
+   as shown in `Figure 4-2 <#_bookmark197>`__. In higher dimen‐ sions,
+   we would have higher-dimensional hyperplanes. Mathematically, we look
+   at the difference between each real data point (*y*) and our model’s
+   prediction (*ŷ*). Square these differences to avoid negative numbers
+   and penalize larger differ‐ ences, and then add them up and take the
+   average. This is a measure of how well our data fits the line.
 
-Parameters
-----------
+   *Figure 4-2. Linear regression*
 
-.. autoclass:: A2C
-  :members:
-  :inherited-members:
+Grid search
+~~~~~~~~~~~
 
+   The overall idea of the grid search is to create a grid of all
+   possible hyperparameter combinations and train the model using each
+   one of them. Hyperparameters are the external characteristic of the
+   model, can be considered the model’s settings, and are not estimated
+   based on data-like model parameters. These hyperparameters are tuned
+   during grid search to achieve better model performance.
 
-Callbacks - Accessible Variables
---------------------------------
+   Due to its exhaustive search, a grid search is guaranteed to find the
+   optimal parame‐ ter within the grid. The drawback is that the size of
+   the grid grows exponentially with the addition of more parameters or
+   more considered values.
 
-Depending on initialization parameters and timestep, different variables are accessible.
-Variables accessible "From timestep X" are variables that can be accessed when
-``self.timestep==X`` in the ``on_step`` function.
+   The GridSearchCV class in the model_selection module of the sklearn
+   package facil‐ itates the systematic evaluation of all combinations
+   of the hyperparameter values that we would like to test.
 
-      +--------------------------------+-----------------------------------------------------+
-      |Variable                        |                                         Availability|
-      +================================+=====================================================+
-      |- self                          |From timestep 1                                      |
-      |- total_timesteps               |                                                     |
-      |- callback                      |                                                     |
-      |- log_interval                  |                                                     |
-      |- tb_log_name                   |                                                     |
-      |- reset_num_timesteps           |                                                     |
-      |- new_tb_log                    |                                                     |
-      |- writer                        |                                                     |
-      |- t_start                       |                                                     |
-      |- mb_obs                        |                                                     |
-      |- mb_rewards                    |                                                     |
-      |- mb_actions                    |                                                     |
-      |- mb_values                     |                                                     |
-      |- mb_dones                      |                                                     |
-      |- mb_states                     |                                                     |
-      |- ep_infos                      |                                                     |
-      |- actions                       |                                                     |
-      |- values                        |                                                     |
-      |- states                        |                                                     |
-      |- clipped_actions               |                                                     |
-      |- obs                           |                                                     |
-      |- rewards                       |                                                     |
-      |- dones                         |                                                     |
-      |- infos                         |                                                     |
-      +--------------------------------+-----------------------------------------------------+
-      |- info                          |From timestep 2                                      |
-      |- maybe_ep_info                 |                                                     |
-      +--------------------------------+-----------------------------------------------------+
-      |- update                        |From timestep ``n_step+1``                           |
-      |- rollout                       |                                                     |
-      |- masks                         |                                                     |
-      |- true_reward                   |                                                     |
-      +--------------------------------+-----------------------------------------------------+
-      |- value_loss                    |From timestep ``2 * n_step+1``                       |
-      |- policy_entropy                |                                                     |
-      |- n_seconds                     |                                                     |
-      |- fps                           |                                                     |
-      +--------------------------------+-----------------------------------------------------+
+   The first step is to create a model object. We then define a
+   dictionary where the key‐ words name the hyperparameters and the
+   values list the parameter settings to be tested. For linear
+   regression, the hyperparameter is fit_intercept, which is a boolean
+   variable that determines whether or not to calculate the *intercept*
+   for this model. If set to False, no intercept will be used in
+   calculations:
+
+   model = LinearRegression()
+
+   param_grid = {'fit_intercept': [True, False]}
+
+   }
+
+   The second step is to instantiate the GridSearchCV object and provide
+   the estimator object and parameter grid, as well as a scoring method
+   and cross validation choice, to the initialization method. Cross
+   validation is a resampling procedure used to evaluate machine
+   learning models, and scoring parameter is the evaluation metrics of
+   the model:\ `1 <#_bookmark202>`__
+
+   With all settings in place, we can fit GridSearchCV:
+
+   grid = GridSearchCV(estimator=model, param_grid=param_grid, scoring=
+   'r2', \\ cv=kfold)
+
+   grid_result = grid.fit(X, Y)
+
+Advantages and disadvantages
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   In terms of advantages, linear regression is easy to understand and
+   interpret. How‐ ever, it may not work well when there is a nonlinear
+   relationship between predicted and predictor variables. Linear
+   regression is prone to *overfitting* (which we will dis‐ cuss in the
+   next section) and when a large number of features are present, it may
+   not handle irrelevant features well. Linear regression also requires
+   the data to follow cer‐ tain
+   `assumptions <https://oreil.ly/tNDnc>`__, such as the absence of
+   multicollinearity. If the assumptions fail, then we cannot trust the
+   results obtained.

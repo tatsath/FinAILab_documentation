@@ -1,262 +1,467 @@
 .. _AI_ML_Fin:
 
-======================================
-AI and Machine Learning in Finance
-======================================
+**CHAPTER 1**
 
-There is a new wave of machine learning and data science in finance, and the related
-applications will transform the industry over the next few decades.
-Currently, most financial firms, including hedge funds, investment and retail banks,
-and fintech firms, are adopting and investing heavily in machine learning. Going for‐
-ward, financial institutions will need a growing number of machine learning and data
-science experts.
-Machine learning in finance has become more prominent recently due to the availa‐
-bility of vast amounts of data and more affordable computing power. The use of data
-science and machine learning is exploding exponentially across all areas of finance.
-The success of machine learning in finance depends upon building efficient infra‐
-structure, using the correct toolkit, and applying the right algorithms. The concepts
-related to these building blocks of machine learning in finance are demonstrated and
-utilized throughout this document.
+**Machine Learning in Finance:**
 
+**The Landscape**
 
-General advice when using Machine Learning
-================================================
+   *Machine learning promises to shake up large swathes of finance*
 
-TL;DR
------
+   —The Economist (2017)
 
-1. Read about RL and Stable Baselines
-2. Do quantitative experiments and hyperparameter tuning if needed
-3. Evaluate the performance using a separate test environment
-4. For better performance, increase the training budget
+   There is a new wave of machine learning and data science in finance,
+   and the related applications will transform the industry over the
+   next few decades.
 
+   Currently, most financial firms, including hedge funds, investment
+   and retail banks, and fintech firms, are adopting and investing
+   heavily in machine learning. Going for‐ ward, financial institutions
+   will need a growing number of machine learning and data science
+   experts.
 
-Like any other subject, if you want to work with RL, you should first read about it (we have a dedicated `resource page <rl.html>`_ to get you started)
-to understand what you are using. We also recommend you read Stable Baselines (SB) documentation and do the `tutorial <https://github.com/araffin/rl-tutorial-jnrr19>`_.
-It covers basic usage and guide you towards more advanced concepts of the library (e.g. callbacks and wrappers).
+   Machine learning in finance has become more prominent recently due to
+   the availa‐ bility of vast amounts of data and more affordable
+   computing power. The use of data science and machine learning is
+   exploding exponentially across all areas of finance.
 
-Reinforcement Learning differs from other machine learning methods in several ways. The data used to train the agent is collected
-through interactions with the environment by the agent itself (compared to supervised learning where you have a fixed dataset for instance).
-This dependence can lead to vicious circle: if the agent collects poor quality data (e.g., trajectories with no rewards), then it will not improve and continue to amass
-bad trajectories.
+   The success of machine learning in finance depends upon building
+   efficient infra‐ structure, using the correct toolkit, and applying
+   the right algorithms. The concepts related to these building blocks
+   of machine learning in finance are demonstrated and utilized
+   throughout this book.
 
-This factor, among others, explains that results in RL may vary from one run to another (i.e., when only the seed of the pseudo-random generator changes).
-For this reason, you should always do several runs to have quantitative results.
+   In this chapter, we provide an introduction to the current and future
+   application of machine learning in finance, including a brief
+   overview of different types of machine learning. This chapter and the
+   two that follow serve as the foundation for the case studies
+   presented in the rest of the book.
 
-Good results in RL are generally dependent on finding appropriate hyperparameters. Recent algorithms (PPO, SAC, TD3) normally require little hyperparameter tuning,
-however, *don't expect the default ones to work* on any environment.
+Current and Future Machine Learning Applications in Finance
+===========================================================
 
-Therefore, we *highly recommend you* to take a look at the `RL zoo <https://github.com/araffin/rl-baselines-zoo>`_ (or the original papers) for tuned hyperparameters.
-A best practice when you apply RL to a new problem is to do automatic hyperparameter optimization. Again, this is included in the `RL zoo <https://github.com/araffin/rl-baselines-zoo>`_.
+   Let’s take a look at some promising machine learning applications in
+   finance. The case studies presented in this book cover all the
+   applications mentioned here.
 
-When applying RL to a custom problem, you should always normalize the input to the agent (e.g. using VecNormalize for PPO2/A2C)
-and look at common preprocessing done on other environments (e.g. for `Atari <https://danieltakeshi.github.io/2016/11/25/frame-skipping-and-preprocessing-for-deep-q-networks-on-atari-2600-games/>`_, frame-stack, ...).
-Please refer to *Tips and Tricks when creating a custom environment* paragraph below for more advice related to custom environments.
+Algorithmic Trading
+-------------------
 
+   *Algorithmic trading* (or simply *algo trading*) is the use of
+   algorithms to conduct trades autonomously. With origins going back to
+   the 1970s, algorithmic trading (sometimes called Automated Trading
+   Systems, which is arguably a more accurate description) involves the
+   use of automated preprogrammed trading instructions to make extremely
+   fast, objective trading decisions.
 
-Current Limitations of RL
--------------------------
+   Machine learning stands to push algorithmic trading to new levels.
+   Not only can more advanced strategies be employed and adapted in real
+   time, but machine learn‐ ing–based techniques can offer even more
+   avenues for gaining special insight into market movements. Most hedge
+   funds and financial institutions do not openly dis‐ close their
+   machine learning–based approaches to trading (for good reason), but
+   machine learning is playing an increasingly important role in
+   calibrating trading decisions in real time.
 
-You have to be aware of the current `limitations <https://www.alexirpan.com/2018/02/14/rl-hard.html>`_ of reinforcement learning.
+Portfolio Management and Robo-Advisors
+--------------------------------------
 
+   Asset and wealth management firms are exploring potential artificial
+   intelligence (AI) solutions for improving their investment decisions
+   and making use of their troves of historical data.
 
-Model-free RL algorithms (i.e. all the algorithms implemented in SB) are usually *sample inefficient*. They require a lot of samples (sometimes millions of interactions) to learn something useful.
-That's why most of the successes in RL were achieved on games or in simulation only. For instance, in this `work <https://www.youtube.com/watch?v=aTDkYFZFWug>`_ by ETH Zurich, the ANYmal robot was trained in simulation only, and then tested in the real world.
+   One example of this is the use of *robo-advisors*, algorithms built
+   to calibrate a finan‐ cial portfolio to the goals and risk tolerance
+   of the user. Additionally, they provide automated financial guidance
+   and service to end investors and clients.
 
-As a general advice, to obtain better performances, you should augment the budget of the agent (number of training timesteps).
+   A user enters their financial goals (e.g., to retire at age 65 with
+   $250,000 in savings), age, income, and current financial assets. The
+   advisor (the *allocator*) then spreads investments across asset
+   classes and financial instruments in order to reach the user’s goals.
 
+   The system then calibrates to changes in the user’s goals and
+   real-time changes in the market, aiming always to find the best fit
+   for the user’s original goals. Robo-advisors have gained significant
+   traction among consumers who do not need a human advisor to feel
+   comfortable investing.
 
-In order to achieve the desired behavior, expert knowledge is often required to design an adequate reward function.
-This *reward engineering* (or *RewArt* as coined by `Freek Stulp <http://www.freekstulp.net/>`_), necessitates several iterations. As a good example of reward shaping,
-you can take a look at `Deep Mimic paper <https://xbpeng.github.io/projects/DeepMimic/index.html>`_ which combines imitation learning and reinforcement learning to do acrobatic moves.
+Fraud Detection
+---------------
 
-One last limitation of RL is the instability of training. That is to say, you can observe during training a huge drop in performance.
-This behavior is particularly present in ``DDPG``, that's why its extension ``TD3`` tries to tackle that issue.
-Other method, like ``TRPO`` or ``PPO`` make use of a *trust region* to minimize that problem by avoiding too large update.
+   Fraud is a massive problem for financial institutions and one of the
+   foremost reasons to leverage machine learning in finance.
 
+   There is currently a significant data security risk due to high
+   computing power, fre‐ quent internet use, and an increasing amount of
+   company data being stored online. While previous financial fraud
+   detection systems depended heavily on complex and robust sets of
+   rules, modern fraud detection goes beyond following a checklist of
+   risk factors—it actively learns and calibrates to new potential (or
+   real) security threats.
 
-How to evaluate an RL algorithm?
---------------------------------
+   Machine learning is ideally suited to combating fraudulent financial
+   transactions. This is because machine learning systems can scan
+   through vast datasets, detect unusual activities, and flag them
+   instantly. Given the incalculably high number of ways that security
+   can be breached, genuine machine learning systems will be an absolute
+   necessity in the days to come.
 
-Because most algorithms use exploration noise during training, you need a separate test environment to evaluate the performance
-of your agent at a given time. It is recommended to periodically evaluate your agent for ``n`` test episodes (``n`` is usually between 5 and 20)
-and average the reward per episode to have a good estimate.
+Loans/Credit Card/Insurance Underwriting
+----------------------------------------
 
-As some policy are stochastic by default (e.g. A2C or PPO), you should also try to set `deterministic=True` when calling the `.predict()` method,
-this frequently leads to better performance.
-Looking at the training curve (episode reward function of the timesteps) is a good proxy but underestimates the agent true performance.
+   Underwriting could be described as a perfect job for machine learning
+   in finance, and indeed there is a great deal of worry in the industry
+   that machines will replace a large swath of underwriting positions
+   that exist today.
 
+   Especially at large companies (big banks and publicly traded
+   insurance firms), machine learning algorithms can be trained on
+   millions of examples of consumer data and financial lending or
+   insurance outcomes, such as whether a person defaulted on their loan
+   or mortgage.
 
-.. note::
+   Underlying financial trends can be assessed with algorithms and
+   continuously ana‐ lyzed to detect trends that might influence lending
+   and underwriting risk in the future. Algorithms can perform automated
+   tasks such as matching data records, identifying exceptions, and
+   calculating whether an applicant qualifies for a credit or insurance
+   product.
 
-	We provide an ``EvalCallback`` for doing such evaluation. You can read more about it in the :ref:`Callbacks <callbacks>` section.
+Automation and Chatbots
+-----------------------
 
+   Automation is patently well suited to finance. It reduces the strain
+   that repetitive, low-value tasks put on human employees. It tackles
+   the routine, everyday processes, freeing up teams to finish their
+   high-value work. In doing so, it drives enormous time and cost
+   savings.
 
+   Adding machine learning and AI into the automation mix adds another
+   level of sup‐ port for employees. With access to relevant data,
+   machine learning and AI can pro‐ vide an in-depth data analysis to
+   support finance teams with difficult decisions. In some cases, it may
+   even be able to recommend the best course of action for employ‐ ees
+   to approve and enact.
 
-We suggest you reading `Deep Reinforcement Learning that Matters <https://arxiv.org/abs/1709.06560>`_ for a good discussion about RL evaluation.
+   AI and automation in the financial sector can also learn to recognize
+   errors, reducing the time wasted between discovery and resolution.
+   This means that human team members are less likely to be delayed in
+   providing their reports and are able to com‐ plete their work with
+   fewer errors.
 
-You can also take a look at this `blog post <https://openlab-flowers.inria.fr/t/how-many-random-seeds-should-i-use-statistical-power-analysis-in-deep-reinforcement-learning-experiments/457>`_
-and this `issue <https://github.com/hill-a/stable-baselines/issues/199>`_ by Cédric Colas.
+   AI chatbots can be implemented to support finance and banking
+   customers. With the rise in popularity of live chat software in
+   banking and finance businesses, chatbots are the natural evolution.
 
+Risk Management
+---------------
 
-Which algorithm should I use?
-=============================
+   Machine learning techniques are transforming how we approach risk
+   management. All aspects of understanding and controlling risk are
+   being revolutionized through the growth of solutions driven by
+   machine learning. Examples range from deciding how much a bank should
+   lend a customer to improving compliance and reducing model risk.
 
-There is no silver bullet in RL, depending on your needs and problem, you may choose one or the other.
-The first distinction comes from your action space, i.e., do you have discrete (e.g. LEFT, RIGHT, ...)
-or continuous actions (ex: go to a certain speed)?
+Asset Price Prediction
+----------------------
 
-Some algorithms are only tailored for one or the other domain: ``DQN`` only supports discrete actions, where ``SAC`` is restricted to continuous actions.
+   Asset price prediction is considered the most frequently discussed
+   and most sophisti‐ cated area in finance. Predicting asset prices
+   allows one to understand the factors that drive the market and
+   speculate asset performance. Traditionally, asset price predic‐ tion
+   was performed by analyzing past financial reports and market
+   performance to determine what position to take for a specific
+   security or asset class. However, with a tremendous increase in the
+   amount of financial data, the traditional approaches for analysis and
+   stock-selection strategies are being supplemented with ML-based
+   techniques.
 
-The second difference that will help you choose is whether you can parallelize your training or not, and how you can do it (with or without MPI?).
-If what matters is the wall clock training time, then you should lean towards ``A2C`` and its derivatives (PPO, ACER, ACKTR, ...).
-Take a look at the `Vectorized Environments <vec_envs.html>`_ to learn more about training with multiple workers.
-
-To sum it up:
-
-Discrete Actions
-----------------
-
-.. note::
-
-	This covers ``Discrete``, ``MultiDiscrete``, ``Binary`` and ``MultiBinary`` spaces
-
-
-Discrete Actions - Single Process
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-DQN with extensions (double DQN, prioritized replay, ...) and ACER are the recommended algorithms.
-DQN is usually slower to train (regarding wall clock time) but is the most sample efficient (because of its replay buffer).
-
-Discrete Actions - Multiprocessed
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-You should give a try to PPO2, A2C and its successors (ACKTR, ACER).
-
-If you can multiprocess the training using MPI, then you should checkout PPO1 and TRPO.
-
-
-Continuous Actions
+Derivative Pricing
 ------------------
 
-Continuous Actions - Single Process
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   Recent machine learning successes, as well as the fast pace of
+   innovation, indicate that ML applications for derivatives pricing
+   should become widely used in the com‐ ing years. The world of
+   Black-Scholes models, volatility smiles, and Excel spreadsheet models
+   should wane as more advanced methods become readily available.
 
-Current State Of The Art (SOTA) algorithms are ``SAC`` and ``TD3``.
-Please use the hyperparameters in the `RL zoo <https://github.com/araffin/rl-baselines-zoo>`_ for best results.
+   The classic derivative pricing models are built on several
+   impractical assumptions to reproduce the empirical relationship
+   between the underlying input data (strike price, time to maturity,
+   option type) and the price of the derivatives observed in the market.
+   Machine learning methods do not rely on several assumptions; they
+   just try to esti‐ mate a function between the input data and price,
+   minimizing the difference between the results of the model and the
+   target.
+
+   The faster deployment times achieved with state-of-the-art ML tools
+   are just one of the advantages that will accelerate the use of
+   machine learning in derivatives pricing.
+
+Sentiment Analysis
+------------------
+
+   Sentiment analysis involves the perusal of enormous volumes of
+   unstructured data, such as videos, transcriptions, photos, audio
+   files, social media posts, articles, and business documents, to
+   determine market sentiment. Sentiment analysis is crucial for all
+   businesses in today’s workplace and is an excellent example of
+   machine learning in finance.
+
+   The most common use of sentiment analysis in the financial sector is
+   the analysis of financial news—in particular, predicting the
+   behaviors and possible trends of mar‐ kets. The stock market moves in
+   response to myriad human-related factors, and the hope is that
+   machine learning will be able to replicate and enhance human
+   intuition about financial activity by discovering new trends and
+   telling signals.
+
+   However, much of the future applications of machine learning will be
+   in understand‐ ing social media, news trends, and other data sources
+   related to predicting the senti‐ ments of customers toward market
+   developments. It will not be limited to predicting stock prices and
+   trades.
+
+Trade Settlement
+----------------
+
+   Trade settlement is the process of transferring securities into the
+   account of a buyer and cash into the seller’s account following a
+   transaction of a financial asset.
+
+   Despite the majority of trades being settled automatically, and with
+   little or no inter‐ action by human beings, about 30% of trades need
+   to be settled manually.
+
+   The use of machine learning not only can identify the reason for
+   failed trades, but it also can analyze why the trades were rejected,
+   provide a solution, and predict which trades may fail in the future.
+   What usually would take a human being five to ten minutes to fix,
+   machine learning can do in a fraction of a second.
+
+Money Laundering
+----------------
+
+   A United Nations report estimates that the amount of money laundered
+   worldwide per year is 2%–5% of global GDP. Machine learning
+   techniques can analyze internal, publicly existing, and transactional
+   data from a client’s broader network in an attempt to spot money
+   laundering signs.
+
+Machine Learning, Deep Learning, Artificial Intelligence, and Data Science
+==========================================================================
+
+   For the majority of people, the terms *machine learning*, *deep
+   learning*, *artificial intelli‐ gence*, and *data science* are
+   confusing. In fact, a lot of people use one term inter‐ changeably
+   with the others.
+
+   `Figure 1-1 <#_bookmark30>`__ shows the relationships between AI,
+   machine learning, deep learning and data science. Machine learning is
+   a subset of AI that consists of techniques that enable computers to
+   identify patterns in data and to deliver AI applications. Deep
+   learning, meanwhile, is a subset of machine learning that enables
+   computers to solve more complex problems.
+
+   |image0|\ Data science isn’t exactly a subset of machine learning,
+   but it uses machine learning, deep learning, and AI to analyze data
+   and reach actionable conclusions. It combines machine learning, deep
+   learning and AI with other disciplines such as big data ana‐ lytics
+   and cloud computing.
+
+   *Figure 1-1. AI, machine learning, deep learning, and data science*
+
+   The following is a summary of the details about artificial
+   intelligence, machine learn‐ ing, deep learning, and data science:
+
+   *Artificial intelligence*
+
+   Artificial intelligence is the field of study by which a computer
+   (and its systems) develop the ability to successfully accomplish
+   complex tasks that usually require human intelligence. These tasks
+   include, but are not limited to, visual perception, speech
+   recognition, decision making, and translation between languages. AI
+   is usually defined as the science of making computers do things that
+   require intelli‐ gence when done by humans.
+
+   *Machine learning*
+
+   Machine learning is an application of artificial intelligence that
+   provides the AI system with the ability to automatically learn from
+   the environment and apply those lessons to make better decisions.
+   There are a variety of algorithms that
+
+   machine learning uses to iteratively learn, describe and improve
+   data, spot pat‐ terns, and then perform actions on these patterns.
+
+   *Deep learning*
+
+   Deep learning is a subset of machine learning that involves the study
+   of algo‐ rithms related to artificial neural networks that contain
+   many blocks (or layers) stacked on each other. The design of deep
+   learning models is inspired by the bio‐ logical neural network of the
+   human brain. It strives to analyze data with a logical structure
+   similar to how a human draws conclusions.
+
+   *Data science*
+
+   Data science is an interdisciplinary field similar to data mining
+   that uses scien‐ tific methods, processes, and systems to extract
+   knowledge or insights from data in various forms, either structured
+   or unstructured. Data science is different from ML and AI because its
+   goal is to gain insight into and understanding of the data by using
+   different scientific tools and techniques. However, there are several
+   tools and techniques common to both ML and data science, some of
+   which are demonstrated in this book.
+
+Machine Learning Types
+======================
+
+   |image1|\ This section will outline all types of machine learning
+   that are used in different case studies presented in this book for
+   various financial applications. The three types of machine learning,
+   as shown in `Figure 1-2 <#_bookmark36>`__, are supervised learning,
+   unsupervised learning, and reinforcement learning.
+
+   *Figure 1-2. Machine learning types*
+
+Supervised
+----------
+
+   The main goal in *supervised learning* is to train a model from
+   labeled data that allows us to make predictions about unseen or
+   future data. Here, the term *supervised* refers to a set of samples
+   where the desired output signals (labels) are already known. There
+   are two types of supervised learning algorithms: classification and
+   regression.
+
+Classification
+~~~~~~~~~~~~~~
+
+   *Classification* is a subcategory of supervised learning in which the
+   goal is to predict the categorical class labels of new instances
+   based on past observations.
+
+Regression
+~~~~~~~~~~
+
+   *Regression* is another subcategory of supervised learning used in
+   the prediction of continuous outcomes. In regression, we are given a
+   number of predictor (explana‐ tory) variables and a continuous
+   response variable (outcome or target), and we try to find a
+   relationship between those variables that allows us to predict an
+   outcome.
+
+   |image2|\ An example of regression versus classification is shown in
+   `Figure 1-3 <#_bookmark42>`__. The chart on the left shows an example
+   of regression. The continuous response variable is return, and the
+   observed values are plotted against the predicted outcomes. On the
+   right, the outcome is a categorical class label, whether the market
+   is bull or bear, and is an example of classification.
+
+   *Figure 1-3. Regression versus classification*
+
+Unsupervised
+------------
+
+   Unsupervised learning is a type of machine learning used to draw
+   inferences from datasets consisting of input data without labeled
+   responses. There are two types of unsupervised learning:
+   dimensionality reduction and clustering.
+
+Dimensionality reduction
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+   *Dimensionality reduction* is the process of reducing the number of
+   features, or vari‐ ables, in a dataset while preserving information
+   and overall model performance. It is a common and powerful way to
+   deal with datasets that have a large number of dimensions.
+
+   |image3|\ `Figure 1-4 <#_bookmark46>`__ illustrates this concept,
+   where the dimension of data is converted from two dimensions (*X\ 1*
+   and *X\ 2*) to one dimension (*Z\ 1*). *Z\ 1* conveys similar
+   information embedded in *X\ 1* and *X\ 2* and reduces the dimension
+   of the data.
+
+   *Figure 1-4. Dimensionality reduction*
+
+Clustering
+~~~~~~~~~~
+
+   *Clustering* is a subcategory of unsupervised learning techniques
+   that allows us to dis‐ cover hidden structures in data. The goal of
+   clustering is to find a natural grouping in data so that items in the
+   same cluster are more similar to each other than to those from
+   different clusters.
+
+   |image4|\ An example of clustering is shown in `Figure
+   1-5 <#_bookmark48>`__, where we can see the entire data clustered
+   into two distinct groups by the clustering algorithm.
+
+   *Figure 1-5. Clustering*
+
+Reinforcement Learning
+----------------------
+
+   Learning from experiences, and the associated rewards or punishments,
+   is the core concept behind *reinforcement learning* (RL). It is about
+   taking suitable actions to maximize reward in a particular situation.
+   The learning system, called an *agent*, can observe the environment,
+   select and perform actions, and receive rewards (or penal‐ ties in
+   the form of negative rewards) in return, as shown in `Figure
+   1-6 <#_bookmark52>`__.
+
+   Reinforcement learning differs from supervised learning in this way:
+   In supervised learning, the training data has the answer key, so the
+   model is trained with the correct answers available. In reinforcement
+   learning, there is no explicit answer. The learning
+
+   |image5|\ system (agent) decides what to do to perform the given task
+   and learns whether that was a correct action based on the reward. The
+   algorithm determines the answer key through its experience.
+
+   *Figure 1-6. Reinforcement learning*
+
+   The steps of the reinforcement learning are as follows:
+
+1. First, the agent interacts with the environment by performing an
+   action.
+
+2. Then the agent receives a reward based on the action it performed.
+
+3. Based on the reward, the agent receives an observation and
+   understands whether the action was good or bad. If the action was
+   good—that is, if the agent received a positive reward—then the agent
+   will prefer performing that action. If the reward was less favorable,
+   the agent will try performing another action to receive a posi‐ tive
+   reward. It is basically a trial-and-error learning process.
+
+Natural Language Processing
+===========================
+
+   Natural language processing (NLP) is a branch of AI that deals with
+   the problems of making a machine understand the structure and the
+   meaning of natural language as used by humans. Several techniques of
+   machine learning and deep learning are used within NLP.
+
+   NLP has many applications in the finance sectors in areas such as
+   sentiment analysis, chatbots, and document processing. A lot of
+   information, such as sell side reports, earnings calls, and newspaper
+   headlines, is communicated via text message, making NLP quite useful
+   in the financial domain.
+
+   Given the extensive application of NLP algorithms based on machine
+   learning in finance, there is a separate chapter of this book
+   (`Chapter 10 <#_bookmark722>`__) dedicated to NLP and related case
+   studies.
 
 
-Continuous Actions - Multiprocessed
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Next Steps
+----------
 
-Take a look at PPO2, TRPO or A2C. Again, don't forget to take the hyperparameters from the `RL zoo <https://github.com/araffin/rl-baselines-zoo>`_
-for continuous actions problems (cf *Bullet* envs).
-
-.. note::
-
-  Normalization is critical for those algorithms
-
-If you can use MPI, then you can choose between PPO1, TRPO and DDPG.
-
-
-Goal Environment
------------------
-
-If your environment follows the ``GoalEnv`` interface (cf `HER <../modules/her.html>`_), then you should use
-HER + (SAC/TD3/DDPG/DQN) depending on the action space.
-
-
-.. note::
-
-	The number of workers is an important hyperparameters for experiments with HER. Currently, only HER+DDPG supports multiprocessing using MPI.
-
-
-
-Tips and Tricks when creating a custom environment
-==================================================
-
-If you want to learn about how to create a custom environment, we recommend you read this `page <custom_env.html>`_.
-We also provide a `colab notebook <https://colab.research.google.com/github/araffin/rl-tutorial-jnrr19/blob/master/5_custom_gym_env.ipynb>`_ for
-a concrete example of creating a custom gym environment.
-
-Some basic advice:
-
-- always normalize your observation space when you can, i.e., when you know the boundaries
-- normalize your action space and make it symmetric when continuous (cf potential issue below) A good practice is to rescale your actions to lie in [-1, 1]. This does not limit you as you can easily rescale the action inside the environment
-- start with shaped reward (i.e. informative reward) and simplified version of your problem
-- debug with random actions to check that your environment works and follows the gym interface:
-
-
-We provide a helper to check that your environment runs without error:
-
-.. code-block:: python
-
-	from stable_baselines.common.env_checker import check_env
-
-	env = CustomEnv(arg1, ...)
-	# It will check your custom environment and output additional warnings if needed
-	check_env(env)
-
-
-If you want to quickly try a random agent on your environment, you can also do:
-
-.. code-block:: python
-
-	env = YourEnv()
-	obs = env.reset()
-	n_steps = 10
-	for _ in range(n_steps):
-	    # Random action
-	    action = env.action_space.sample()
-	    obs, reward, done, info = env.step(action)
-
-
-**Why should I normalize the action space?**
-
-
-Most reinforcement learning algorithms rely on a Gaussian distribution (initially centered at 0 with std 1) for continuous actions.
-So, if you forget to normalize the action space when using a custom environment,
-this can harm learning and be difficult to debug (cf attached image and `issue #473 <https://github.com/hill-a/stable-baselines/issues/473>`_).
-
-.. figure:: ../_static/img/mistake.png
-
-
-Another consequence of using a Gaussian is that the action range is not bounded.
-That's why clipping is usually used as a bandage to stay in a valid interval.
-A better solution would be to use a squashing function (cf ``SAC``) or a Beta distribution (cf `issue #112 <https://github.com/hill-a/stable-baselines/issues/112>`_).
-
-.. note::
-
-	This statement is not true for ``DDPG`` or ``TD3`` because they don't rely on any probability distribution.
-
-
-
-Tips and Tricks when implementing an RL algorithm
-=================================================
-
-When you try to reproduce a RL paper by implementing the algorithm, the `nuts and bolts of RL research <http://joschu.net/docs/nuts-and-bolts.pdf>`_
-by John Schulman are quite useful (`video <https://www.youtube.com/watch?v=8EcdaCk9KaQ>`_).
-
-We *recommend following those steps to have a working RL algorithm*:
-
-1. Read the original paper several times
-2. Read existing implementations (if available)
-3. Try to have some "sign of life" on toy problems
-4. Validate the implementation by making it run on harder and harder envs (you can compare results against the RL zoo)
-	You usually need to run hyperparameter optimization for that step.
-
-You need to be particularly careful on the shape of the different objects you are manipulating (a broadcast mistake will fail silently cf `issue #75 <https://github.com/hill-a/stable-baselines/pull/76>`_)
-and when to stop the gradient propagation.
-
-A personal pick (by @araffin) for environments with gradual difficulty in RL with continuous actions:
-
-1. Pendulum (easy to solve)
-2. HalfCheetahBullet (medium difficulty with local minima and shaped reward)
-3. BipedalWalkerHardcore (if it works on that one, then you can have a cookie)
-
-in RL with discrete actions:
-
-1. CartPole-v1 (easy to be better than random agent, harder to achieve maximal performance)
-2. LunarLander
-3. Pong (one of the easiest Atari game)
-4. other Atari games (e.g. Breakout)
+   In terms of the platforms used for machine learning, the Python
+   ecosystem is grow‐ ing and is one of the most dominant programming
+   languages for machine learning. In the next chapter, we will learn
+   about the model development steps, from data preparation to model
+   deployment in a Python-based framework.

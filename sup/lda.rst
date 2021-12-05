@@ -1,226 +1,48 @@
 .. _lda:
 
-.. automodule:: stable_baselines.deepq
-
-
 Linear Discriminant Analysis
-====
+----------------------------
 
-`Deep Q Network (DQN) <https://arxiv.org/abs/1312.5602>`_
-and its extensions (Double-DQN, Dueling-DQN, Prioritized Experience Replay).
+   The objective of the *linear discriminant analysis* (LDA) algorithm
+   is to project the data onto a lower-dimensional space in a way that
+   the class separability is maximized and the variance within a class
+   is minimized.\ `4 <#_bookmark234>`__
 
-.. warning::
+   During the training of the LDA model, the statistical properties
+   (i.e., mean and cova‐ riance matrix) of each class are computed. The
+   statistical properties are estimated on the basis of the following
+   assumptions about the data:
 
-  The DQN model does not support ``stable_baselines.common.policies``,
-  as a result it must use its own policy models (see :ref:`deepq_policies`).
+-  Data is `normally distributed <https://oreil.ly/cuc7p>`__, so that
+   each variable is shaped like a bell curve when plotted.
 
-.. rubric:: Available Policies
+-  Each attribute has the same variance, and the values of each variable
+   vary around the mean by the same amount on average.
 
-.. autosummary::
-    :nosignatures:
+..
 
-    MlpPolicy
-    LnMlpPolicy
-    CnnPolicy
-    LnCnnPolicy
+   To make a prediction, LDA estimates the probability that a new set of
+   inputs belongs to every class. The output class is the one that has
+   the highest probability.
 
-Notes
------
+Implementation in Python and hyperparameters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- DQN paper: https://arxiv.org/abs/1312.5602
-- Dueling DQN: https://arxiv.org/abs/1511.06581
-- Double-Q Learning: https://arxiv.org/abs/1509.06461
-- Prioritized Experience Replay: https://arxiv.org/abs/1511.05952
+   The LDA classification model can be constructed using the sklearn
+   package of Python, as shown in the following code snippet:
 
-.. note::
+   from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+   model = LinearDiscriminantAnalysis()
 
-    By default, the DQN class has double q learning and dueling extensions enabled.
-    See `Issue #406 <https://github.com/hill-a/stable-baselines/issues/406>`_ for disabling dueling.
-    To disable double-q learning, you can change the default value in the constructor.
+   model.fit(X, Y)
 
+   The key hyperparameter for the LDA model is number of components for
+   dimen‐ sionality reduction, which is represented by n_components in
+   sklearn.
 
-Can I use?
-----------
+   Advantages and disadvantages
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Recurrent policies: ❌
--  Multi processing: ❌
--  Gym spaces:
-
-
-============= ====== ===========
-Space         Action Observation
-============= ====== ===========
-Discrete      ✔️      ✔️
-Box           ❌       ✔️
-MultiDiscrete  ❌       ✔️
-MultiBinary    ❌       ✔️
-============= ====== ===========
-
-
-Example
--------
-
-.. code-block:: python
-
-  import gym
-
-  from stable_baselines.common.vec_env import DummyVecEnv
-  from stable_baselines.deepq.policies import MlpPolicy
-  from stable_baselines import DQN
-
-  env = gym.make('CartPole-v1')
-
-  model = DQN(MlpPolicy, env, verbose=1)
-  model.learn(total_timesteps=25000)
-  model.save("deepq_cartpole")
-
-  del model # remove to demonstrate saving and loading
-
-  model = DQN.load("deepq_cartpole")
-
-  obs = env.reset()
-  while True:
-      action, _states = model.predict(obs)
-      obs, rewards, dones, info = env.step(action)
-      env.render()
-
-
-With Atari:
-
-.. code-block:: python
-
-  from stable_baselines.common.atari_wrappers import make_atari
-  from stable_baselines.deepq.policies import MlpPolicy, CnnPolicy
-  from stable_baselines import DQN
-
-  env = make_atari('BreakoutNoFrameskip-v4')
-
-  model = DQN(CnnPolicy, env, verbose=1)
-  model.learn(total_timesteps=25000)
-  model.save("deepq_breakout")
-
-  del model # remove to demonstrate saving and loading
-
-  model = DQN.load("deepq_breakout")
-
-  obs = env.reset()
-  while True:
-      action, _states = model.predict(obs)
-      obs, rewards, dones, info = env.step(action)
-      env.render()
-
-Parameters
-----------
-
-.. autoclass:: DQN
-  :members:
-  :inherited-members:
-
-.. _deepq_policies:
-
-DQN Policies
-------------
-
-.. autoclass:: MlpPolicy
-  :members:
-  :inherited-members:
-
-
-.. autoclass:: LnMlpPolicy
-  :members:
-  :inherited-members:
-
-
-.. autoclass:: CnnPolicy
-  :members:
-  :inherited-members:
-
-
-.. autoclass:: LnCnnPolicy
-  :members:
-  :inherited-members:
-
-
-Custom Policy Network
----------------------
-
-Similarly to the example given in the `examples <../guide/custom_policy.html>`_ page.
-You can easily define a custom architecture for the policy network:
-
-.. code-block:: python
-
-  import gym
-
-  from stable_baselines.deepq.policies import FeedForwardPolicy
-  from stable_baselines.common.vec_env import DummyVecEnv
-  from stable_baselines import DQN
-
-  # Custom MLP policy of two layers of size 32 each
-  class CustomDQNPolicy(FeedForwardPolicy):
-      def __init__(self, *args, **kwargs):
-          super(CustomDQNPolicy, self).__init__(*args, **kwargs,
-                                             layers=[32, 32],
-                                             layer_norm=False,
-                                             feature_extraction="mlp")
-
-  # Create and wrap the environment
-  env = gym.make('LunarLander-v2')
-  env = DummyVecEnv([lambda: env])
-
-  model = DQN(CustomDQNPolicy, env, verbose=1)
-  # Train the agent
-  model.learn(total_timesteps=100000)
-
-
-Callbacks - Accessible Variables
---------------------------------
-
-Depending on initialization parameters and timestep, different variables are accessible.
-Variables accessible from "timestep X" are variables that can be accessed when
-``self.timestep==X`` from the ``on_step`` function.
-
-    +--------------------------------+-----------------------------------------------------+
-    |Variable                        |                                         Availability|
-    +================================+=====================================================+
-    |- self                          |From timestep 1                                      |
-    |- total_timesteps               |                                                     |
-    |- callback                      |                                                     |
-    |- log_interval                  |                                                     |
-    |- tb_log_name                   |                                                     |
-    |- reset_num_timesteps           |                                                     |
-    |- replay_wrapper                |                                                     |
-    |- new_tb_log                    |                                                     |
-    |- writer                        |                                                     |
-    |- episode_rewards               |                                                     |
-    |- episode_successes             |                                                     |
-    |- reset                         |                                                     |
-    |- obs                           |                                                     |
-    |- _                             |                                                     |
-    |- kwargs                        |                                                     |
-    |- update_eps                    |                                                     |
-    |- update_param_noise_threshold  |                                                     |
-    |- action                        |                                                     |
-    |- env_action                    |                                                     |
-    |- new_obs                       |                                                     |
-    |- rew                           |                                                     |
-    |- done                          |                                                     |
-    |- info                          |                                                     |
-    +--------------------------------+-----------------------------------------------------+
-    |- obs\_                         |From timestep 2                                      |
-    |- new_obs\_                     |                                                     |
-    |- reward\_                      |                                                     |
-    |- can_sample                    |                                                     |
-    |- mean_100ep_reward             |                                                     |
-    |- num_episodes                  |                                                     |
-    +--------------------------------+-----------------------------------------------------+
-    |- maybe_is_success              |After the first episode                              |
-    +--------------------------------+-----------------------------------------------------+
-    |- obses_t                       |After at least ``max(batch_size, learning_starts)``  |
-    |- actions                       |and every `train_freq` steps                         |
-    |- rewards                       |                                                     |
-    |- obses_tp1                     |                                                     |
-    |- dones                         |                                                     |
-    |- weights                       |                                                     |
-    |- batch_idxes                   |                                                     |
-    |- td_errors                     |                                                     |
-    +--------------------------------+-----------------------------------------------------+
+   In terms of advantages, LDA is a relatively simple model with fast
+   implementation and is easy to implement. In terms of disadvantages,
+   it requires feature scaling and involves complex matrix operations.

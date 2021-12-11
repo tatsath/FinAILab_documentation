@@ -33,5 +33,8 @@ Regression
    observed values are plotted against the predicted outcomes. On the
    right, the outcome is a categorical class label, whether the market
    is bull or bear, and is an example of classification.
-
+   .. figure:: img/fig1.1.png
+   
+         
+      
    *Figure 1-3. Regression versus classification*

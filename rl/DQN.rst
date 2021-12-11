@@ -1,127 +1,30 @@
 .. _DQN:
 
-.. automodule:: stable_baselines.a2c
 
 
 Deep Q-Learning
 ====
 
-A synchronous, deterministic variant of `Asynchronous Advantage Actor Critic (A3C) <https://arxiv.org/abs/1602.01783>`_.
-It uses multiple workers to avoid the use of a replay buffer.
+Q-learning may have the following drawbacks:
+      * In cases where the state and action space are large, the optimal Q-value table quickly becomes computationally infeasible.
+      * Q-learning may suffer from instability and divergence.
+To address these shortcomings, we use ANNs to approximate Q-values. For example, if we use a function with parameter θ to calculate Q-values, we can label the Q-value function as Q(s,a;θ). The deep Q-learning algorithm approximates the Q-values by learning a set of weights, θ, of a multilayered deep Q-network that maps states to actions. The algorithm aims to greatly improve and stabilize the training procedure   of Q-learning through two innovative mechanisms:
+Experience replay
+Instead of running Q-learning on state-action pairs as they occur during simula‐ tion or actual experience, the algorithm stores the history of state, action, reward, and next state transitions that are experienced by the agent in one large replay memory. This can be referred to as a mini-batch of observations. During Q- learning updates, samples are drawn at random from the replay memory, and thus one sample could be used multiple times. Experience replay improves data efficiency, removes correlations in the observation sequences, and smooths over changes in the data distribution.
+Periodically updated target
+Q is optimized toward target values that are only periodically updated. The Q- network is cloned and kept frozen as the optimization targets every C step (C is a hyperparameter). This modification makes the training more stable as it over‐ comes the short-term oscillations. To learn the network parameters, the algo‐ rithm applies gradient descent9 to a loss function defined as the squared difference between the DQN’s estimate of the target and its estimate of the Q- value of the current state-action pair, Q(s,a:θ). The loss function is as follows:
+
+L (θi) =  (r + γmax Q(s ′, a ′ ; θi–1) – Q(s, a; θi))2
+a ′
 
 
-Notes
------
-
--  Original paper:  https://arxiv.org/abs/1602.01783
--  OpenAI blog post: https://openai.com/blog/baselines-acktr-a2c/
--  ``python -m stable_baselines.a2c.run_atari`` runs the algorithm for 40M
-   frames = 10M timesteps on an Atari game. See help (``-h``) for more
-   options.
--  ``python -m stable_baselines.a2c.run_mujoco`` runs the algorithm for 1M
-   frames on a Mujoco environment.
-
-Can I use?
-----------
-
--  Recurrent policies: ✔️
--  Multi processing: ✔️
--  Gym spaces:
 
 
-============= ====== ===========
-Space         Action Observation
-============= ====== ===========
-Discrete      ✔️      ✔️
-Box           ✔️      ✔️
-MultiDiscrete ✔️      ✔️
-MultiBinary   ✔️      ✔️
-============= ====== ===========
 
-
-Example
--------
-
-Train a A2C agent on `CartPole-v1` using 4 processes.
-
-.. code-block:: python
-
-  import gym
-
-  from stable_baselines.common.policies import MlpPolicy
-  from stable_baselines.common import make_vec_env
-  from stable_baselines import A2C
-
-  # Parallel environments
-  env = make_vec_env('CartPole-v1', n_envs=4)
-
-  model = A2C(MlpPolicy, env, verbose=1)
-  model.learn(total_timesteps=25000)
-  model.save("a2c_cartpole")
-
-  del model # remove to demonstrate saving and loading
-
-  model = A2C.load("a2c_cartpole")
-
-  obs = env.reset()
-  while True:
-      action, _states = model.predict(obs)
-      obs, rewards, dones, info = env.step(action)
-      env.render()
-
-Parameters
-----------
-
-.. autoclass:: A2C
-  :members:
-  :inherited-members:
-
-
-Callbacks - Accessible Variables
---------------------------------
-
-Depending on initialization parameters and timestep, different variables are accessible.
-Variables accessible "From timestep X" are variables that can be accessed when
-``self.timestep==X`` in the ``on_step`` function.
-
-      +--------------------------------+-----------------------------------------------------+
-      |Variable                        |                                         Availability|
-      +================================+=====================================================+
-      |- self                          |From timestep 1                                      |
-      |- total_timesteps               |                                                     |
-      |- callback                      |                                                     |
-      |- log_interval                  |                                                     |
-      |- tb_log_name                   |                                                     |
-      |- reset_num_timesteps           |                                                     |
-      |- new_tb_log                    |                                                     |
-      |- writer                        |                                                     |
-      |- t_start                       |                                                     |
-      |- mb_obs                        |                                                     |
-      |- mb_rewards                    |                                                     |
-      |- mb_actions                    |                                                     |
-      |- mb_values                     |                                                     |
-      |- mb_dones                      |                                                     |
-      |- mb_states                     |                                                     |
-      |- ep_infos                      |                                                     |
-      |- actions                       |                                                     |
-      |- values                        |                                                     |
-      |- states                        |                                                     |
-      |- clipped_actions               |                                                     |
-      |- obs                           |                                                     |
-      |- rewards                       |                                                     |
-      |- dones                         |                                                     |
-      |- infos                         |                                                     |
-      +--------------------------------+-----------------------------------------------------+
-      |- info                          |From timestep 2                                      |
-      |- maybe_ep_info                 |                                                     |
-      +--------------------------------+-----------------------------------------------------+
-      |- update                        |From timestep ``n_step+1``                           |
-      |- rollout                       |                                                     |
-      |- masks                         |                                                     |
-      |- true_reward                   |                                                     |
-      +--------------------------------+-----------------------------------------------------+
-      |- value_loss                    |From timestep ``2 * n_step+1``                       |
-      |- policy_entropy                |                                                     |
-      |- n_seconds                     |                                                     |
-      |- fps                           |                                                     |
-      +--------------------------------+-----------------------------------------------------+
+    
+The loss function is essentially a mean squared error (MSE) function, where
+(r + γmaxa ′ Q(s , a ′ ; θi–1)) represents the target value and Q s, a; θi represents the
+′
+predicted value. θ are the weights of the network, which are computed when the loss function is minimized. Both the target and the current estimate depend on the set of weights, underlining the distinction from supervised learning, in which targets are fixed prior to training.
+An example of the DQN for the trading example containing buy, sell, and hold actions is represented in Figure 9-6. Here, we provide the network only the state (s)  as input, and we receive Q-values for all possible actions (i.e., buy, sell, and hold) at once. 
+Figure 9-6. DQN

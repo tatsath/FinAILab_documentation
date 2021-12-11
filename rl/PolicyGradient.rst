@@ -5,114 +5,12 @@
 
 Policy Gradient
 ====
-
- `Sample Efficient Actor-Critic with Experience Replay (ACER) <https://arxiv.org/abs/1611.01224>`_ combines
- several ideas of previous algorithms: it uses multiple workers (as A2C), implements a replay buffer (as in DQN),
- uses Retrace for Q-value estimation, importance sampling and a trust region.
-
-
-Notes
------
-
-- Original paper: https://arxiv.org/abs/1611.01224
-- ``python -m stable_baselines.acer.run_atari`` runs the algorithm for 40M frames = 10M timesteps on an Atari game. See help (``-h``) for more options.
-
-Can I use?
-----------
-
--  Recurrent policies: ✔️
--  Multi processing: ✔️
--  Gym spaces:
-
-
-============= ====== ===========
-Space         Action Observation
-============= ====== ===========
-Discrete      ✔️      ✔️
-Box           ❌      ✔️
-MultiDiscrete ❌      ✔️
-MultiBinary   ❌      ✔️
-============= ====== ===========
-
-
-Example
--------
-
-.. code-block:: python
-
-  import gym
-
-  from stable_baselines.common.policies import MlpPolicy, MlpLstmPolicy, MlpLnLstmPolicy
-  from stable_baselines.common import make_vec_env
-  from stable_baselines import ACER
-
-  # multiprocess environment
-  env = make_vec_env('CartPole-v1', n_envs=4)
-
-  model = ACER(MlpPolicy, env, verbose=1)
-  model.learn(total_timesteps=25000)
-  model.save("acer_cartpole")
-
-  del model # remove to demonstrate saving and loading
-
-  model = ACER.load("acer_cartpole")
-
-  obs = env.reset()
-  while True:
-      action, _states = model.predict(obs)
-      obs, rewards, dones, info = env.step(action)
-      env.render()
-
-
-Parameters
-----------
-
-.. autoclass:: ACER
-  :members:
-  :inherited-members:
-
-
-Callbacks - Accessible Variables
---------------------------------
-
-Depending on initialization parameters and timestep, different variables are accessible.
-Variables accessible from "timestep X" are variables that can be accessed when
-``self.timestep==X`` from the ``on_step`` function.
-
-    +--------------------------------+-----------------------------------------------------+
-    |Variable                        |                                         Availability|
-    +================================+=====================================================+
-    |- self                          | From timestep 1                                     |
-    |- total_timesteps               |                                                     |
-    |- callback                      |                                                     |
-    |- log_interval                  |                                                     |
-    |- tb_log_name                   |                                                     |
-    |- reset_num_timesteps           |                                                     |
-    |- new_tb_log                    |                                                     |
-    |- writer                        |                                                     |
-    |- episode_stats                 |                                                     |
-    |- buffer                        |                                                     |
-    |- t_start                       |                                                     |
-    |- enc_obs                       |                                                     |
-    |- mb_obs                        |                                                     |
-    |- mb_actions                    |                                                     |
-    |- mb_mus                        |                                                     |
-    |- mb_dones                      |                                                     |
-    |- mb_rewards                    |                                                     |
-    |- actions                       |                                                     |
-    |- states                        |                                                     |
-    |- mus                           |                                                     |
-    |- clipped_actions               |                                                     |
-    |- obs                           |                                                     |
-    |- rewards                       |                                                     |
-    |- dones                         |                                                     |
-    +--------------------------------+-----------------------------------------------------+
-    |- steps                         | From timestep ``n_step+1``                          |
-    |- masks                         |                                                     |
-    +--------------------------------+-----------------------------------------------------+
-    |- names_ops                     | From timestep ``2 * n_step+1``                      |
-    |- values_ops                    |                                                     |
-    +--------------------------------+-----------------------------------------------------+
-    |- samples_number                | After replay_start steps,  when replay_ratio > 0 and|
-    |                                | buffer is not None                                  |
-    +--------------------------------+-----------------------------------------------------+
+Policy gradient
+Policy gradient is a policy-based method in which we learn a policy function, π, which is a direct map from each state to the best corresponding action at that state. It is a more straightforward approach than the value-based method, without the need for a Q-value function.
+Policy gradient methods learn the policy directly with a parameterized function respect to θ, π(a|s;θ). This function can be a complex function and might require a sophisticated model. In policy gradient methods, we use ANNs to map state to action because they are efficient at learning complex functions. The loss function of the ANN is the opposite of the expected return (cumulative future rewards).
+The objective function of the policy gradient method can be defined as:
+J (θ) = Vπθ (S1) = πθ V 1
+where θ represents a set of weights of the ANN that maps states to actions. The idea here is to maximize the objective function and compute the weights (θ) of the ANN.
+Since this is a maximization problem, we optimize the policy by taking the gradient ascent (as opposed to gradient descent, which is used to minimize the loss function), with the partial derivative of the objective with respect to the policy parameter θ:
+θ ← θ + ∂ J (θ)
+Using gradient ascent, we can find the best θ that produces the highest return. Com‐ puting the gradient numerically can be done by perturbing θ by a small amount ε in the kth dimension or by using an analytical approach for deriving the gradient.

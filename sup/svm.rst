@@ -13,7 +13,8 @@ Support Vector Machine
    4-3 <#_bookmark220>`__. Hence, SVM calculates a maximum-margin
    boundary that leads to a homogeneous partition of all data points.
 
-   |image23|
+   .. image:: ../_static/img/fig4-3.jpg
+   
 
    *Figure 4-3. Support vector machine*
 

@@ -20,10 +20,13 @@ Representation
    where each node is an input variable *x* with a split point and each
    leaf contains an output variable *y* for prediction.
 
-   |image24|\ `Figure 4-4 <#_bookmark238>`__ shows an example of a
-   simple classification tree to predict whether a per‐ son is a male or
+
+   Here is an  an example of a simple classification tree to predict whether a per‐ son is a male or
    a female based on two inputs of height (in centimeters) and weight
    (in kilograms).
+
+   .. image:: ../_static/img/fig4-4.png
+   
 
    *Figure 4-4. Classification and regression tree example*
 

@@ -16,12 +16,13 @@ Dimensionality reduction
    and overall model performance. It is a common and powerful way to
    deal with datasets that have a large number of dimensions.
 
-   |image3|\ `Figure 1-4 <#_bookmark46>`__ illustrates this concept,
-   where the dimension of data is converted from two dimensions (*X\ 1*
+   .. image:: ../_static/img/fig1.4.png
+
+   Here the dimension of data is converted from two dimensions (*X\ 1*
    and *X\ 2*) to one dimension (*Z\ 1*). *Z\ 1* conveys similar
    information embedded in *X\ 1* and *X\ 2* and reduces the dimension
    of the data.
-
+   
    *Figure 1-4. Dimensionality reduction*
 
 Clustering
@@ -33,8 +34,10 @@ Clustering
    same cluster are more similar to each other than to those from
    different clusters.
 
-   |image4|\ An example of clustering is shown in `Figure
+   .. image:: ../_static/img/fig1.5.png
+   
+   *Figure 1-5. Clustering*
+
+   An example of clustering is shown in `Figure
    1-5 <#_bookmark48>`__, where we can see the entire data clustered
    into two distinct groups by the clustering algorithm.
-
-   *Figure 1-5. Clustering*

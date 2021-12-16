@@ -68,7 +68,7 @@ Training a model
 
    *Find the parameters that minimize loss*
 
-   |image22|\ For example, make our model as accurate as possible.
+   For example, make our model as accurate as possible.
    Graphically, in two dimen‐ sions, this results in a line of best fit
    as shown in `Figure 4-2 <#_bookmark197>`__. In higher dimen‐ sions,
    we would have higher-dimensional hyperplanes. Mathematically, we look
@@ -76,6 +76,9 @@ Training a model
    prediction (*ŷ*). Square these differences to avoid negative numbers
    and penalize larger differ‐ ences, and then add them up and take the
    average. This is a measure of how well our data fits the line.
+
+   .. image:: ../_static/img/fig4-2.jpg
+   
 
    *Figure 4-2. Linear regression*
 

@@ -114,7 +114,7 @@ max
 18424.000
 72.000
 
-        3.2. Data visualization. The fastest way to learn more about the data is to visualize it. Visualization involves independently understanding each attribute of the dataset.
+3.2. Data visualization. The fastest way to learn more about the data is to visualize it. Visualization involves independently understanding each attribute of the dataset.
 Some of the plot types are as follows:
 Univariate plots
 Histograms and density plots
@@ -129,6 +129,10 @@ Univariate plot: density plot
 from matplotlib import pyplot
 dataset.plot(kind='density', subplots=True, layout=(3,3), sharex=False,\ legend=True, fontsize=1, figsize=(10,4))
 pyplot.show()
+
+.. image:: ../_static/img/fig2-3.png
+
+
 Figure 2-3 illustrates the output.
 Figure 2-3. Histogram (top) and density plot (bottom)
 The Python code for multivariate plot types is illustrated with examples below:
@@ -139,6 +143,9 @@ sns.heatmap(correlation, vmax=1, square=True,annot=True,cmap='cubehelix')
 Multivariate plot: scatterplot matrix
 from pandas.plotting import scatter_matrix scatter_matrix(dataset)
 Figure 2-4 illustrates the output.
+
+.. image:: ../_static/img/fig2.4.jpg
+
 
 Figure 2-4. Correlation (left) and scatterplot (right)
     4. Data preparation
@@ -190,9 +197,8 @@ dataset.drop(['Feature1','Feature2','Feature3'],axis=1,inplace=True)
 
 
 
-    1 Feature selection is more relevant for supervised learning models and is described in detail in the individual case studies in Chapters 5 and 6.
-    2 Overfitting is covered in detail in Chapter 4.
-        4.3. Data transformation. Many machine learning algorithms make assumptions about the data. It is a good practice to perform the data preparation in such a way that exposes the data in the best possible manner to the machine learning algorithms. This can be accomplished through data transformation.
+    
+4.3. Data transformation. Many machine learning algorithms make assumptions about the data. It is a good practice to perform the data preparation in such a way that exposes the data in the best possible manner to the machine learning algorithms. This can be accomplished through data transformation.
 The different data transformation approaches are as follows:
 Rescaling
 When data comprises attributes with varying scales, many machine learning algorithms can benefit from rescaling all the attributes to the same scale. Attributes are often rescaled in the range between zero and one. This is useful for optimization algorithms used in the core of machine learning algorithms, and it also helps to speed up the calculations in an algorithm:

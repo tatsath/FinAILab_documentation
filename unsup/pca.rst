@@ -28,7 +28,7 @@ Principal Component Analysis
    existing components. Thus the resulting set constitutes an orthogonal
    basis for a vector space.
 
-   |image37|\ The decline in the amount of variance of the original data
+    The decline in the amount of variance of the original data
    explained by each principal component reflects the extent of
    correlation among the original features. The number of components
    that capture, for example, 95% of the original variation relative to
@@ -36,6 +36,9 @@ Principal Component Analysis
    independent informa‐ tion of the original data. In order to
    understand how PCA works, let’s consider the distribution of data
    shown in `Figure 7-1 <#_bookmark513>`__.
+
+   .. image:: ../_static/img/fig7-1.png
+
 
    *Figure 7-1. PCA-1*
 
@@ -50,9 +53,12 @@ Principal Component Analysis
    maximum spread). Then it moves the other axis orthogonally to the
    principal one, into a less important direction of variation.
 
-   |image38|\ `Figure 7-2 <#_bookmark514>`__ shows an example of PCA in
+   Here is an shows an example of PCA in
    which two dimensions explain nearly all the variance of the
    underlying data.
+
+   .. image:: ../_static/img/fig7-2.png
+   
 
    *Figure 7-2. PCA-2*
 

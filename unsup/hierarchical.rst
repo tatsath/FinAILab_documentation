@@ -67,8 +67,8 @@ Hierarchical Clustering
    dendrogram. Hierarchical clustering is very sensitive to outliers,
    and in their presence, model performance decreases significantly.
 
-   |image41|
-
+   .. image:: ../_static/img/fig8-1.png
+   
    *Figure 8-1. Hierarchical clustering*
 
 .. _implementation-in-python-3:

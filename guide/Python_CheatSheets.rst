@@ -1,107 +1,89 @@
 .. _Python_CheatSheets:
 
-=================
 Python Cheatsheets
-=================
+===========================================================
 
-`RL Baselines ZooO <https://github.com/araffin/rl-baselines-zoo>`_. is a collection of pre-trained Reinforcement Learning agents using
-Stable-Baselines.
-It also provides basic scripts for training, evaluating agents, tuning hyperparameters and recording videos.
+Python Basic
+~~~~~~~~~~~~~~~~~~~~~~~~
+Source : `http://datasciencefree.com/python.pdf <http://datasciencefree.com/python.pdf>`_ 
 
-Goals of this repository:
-
-1. Provide a simple interface to train and enjoy RL agents
-2. Benchmark the different Reinforcement Learning algorithms
-3. Provide tuned hyperparameters for each environment and RL algorithm
-4. Have fun with the trained agents!
-
-Installation
-------------
-
-1. Install dependencies
-::
-
-   apt-get install swig cmake libopenmpi-dev zlib1g-dev ffmpeg
-   pip install stable-baselines box2d box2d-kengz pyyaml pybullet optuna pytablewriter
-
-2. Clone the repository:
-
-::
-
-  git clone https://github.com/araffin/rl-baselines-zoo
+.. image:: ../_static/img/PythonCheat1.png
 
 
-Train an Agent
---------------
+Source : `https://miro.medium.com/max/700/1*2Z6_OZGupydHyEajtQE0Gg.png <https://miro.medium.com/max/700/1*2Z6_OZGupydHyEajtQE0Gg.png>`_ 
 
-The hyperparameters for each environment are defined in
-``hyperparameters/algo_name.yml``.
+.. image:: ../_static/img/PythonCheat2.png
+ 
 
-If the environment exists in this file, then you can train an agent
-using:
+Numpy
+~~~~~~~~~~~~~~~~~~~~~~~~
+Source : `https://www.dataquest.io/blog/numpy-cheat-sheet/ <https://www.dataquest.io/blog/numpy-cheat-sheet/>`_ 
 
-::
+.. image:: ../_static/img/Numpy.png
 
- python train.py --algo algo_name --env env_id
+Source : `http://datasciencefree.com/numpy.pdf <http://datasciencefree.com/numpy.pdf>`_ 
 
-For example (with tensorboard support):
-
-::
-
- python train.py --algo ppo2 --env CartPole-v1 --tensorboard-log /tmp/stable-baselines/
-
-Train for multiple environments (with one call) and with tensorboard
-logging:
-
-::
-
- python train.py --algo a2c --env MountainCar-v0 CartPole-v1 --tensorboard-log /tmp/stable-baselines/
-
-Continue training (here, load pretrained agent for Breakout and continue
-training for 5000 steps):
-
-::
-
- python train.py --algo a2c --env BreakoutNoFrameskip-v4 -i trained_agents/a2c/BreakoutNoFrameskip-v4.pkl -n 5000
+.. image:: ../_static/img/Numpy2.png
 
 
-Enjoy a Trained Agent
----------------------
+Source : `https://www.datacamp.com/community/blog/python-numpy-cheat-sheet#gs.Nw3V6CE <https://www.datacamp.com/community/blog/python-numpy-cheat-sheet#gs.Nw3V6CE>`_ 
 
-If the trained agent exists, then you can see it in action using:
+.. image:: ../_static/img/Numpy3.png
 
-::
+Pandas
+~~~~~~~~~~~~~~~~~~~~~~~~
+Source : `http://datasciencefree.com/pandas.pdf <http://datasciencefree.com/pandas.pdf>`_ 
 
-  python enjoy.py --algo algo_name --env env_id
+.. image:: ../_static/img/Pandas1.png
 
-For example, enjoy A2C on Breakout during 5000 timesteps:
+Source : `https://www.datacamp.com/community/blog/python-pandas-cheat-sheet#gs.S4P4T=U <https://www.datacamp.com/community/blog/python-pandas-cheat-sheet#gs.S4P4T=U>`_ 
 
-::
+.. image:: ../_static/img/Pandas2.png
 
-  python enjoy.py --algo a2c --env BreakoutNoFrameskip-v4 --folder trained_agents/ -n 5000
+Matplotlib
+~~~~~~~~~~~~~~~~~~~~~~~~
+Source : `https://www.datacamp.com/community/blog/python-matplotlib-cheat-sheet <https://www.datacamp.com/community/blog/python-matplotlib-cheat-sheet>`_ 
 
-
-Hyperparameter Optimization
----------------------------
-
-We use `Optuna <https://optuna.org/>`_ for optimizing the hyperparameters.
-
-
-Tune the hyperparameters for PPO2, using a random sampler and median pruner, 2 parallels jobs,
-with a budget of 1000 trials and a maximum of 50000 steps:
-
-::
-
-  python train.py --algo ppo2 --env MountainCar-v0 -n 50000 -optimize --n-trials 1000 --n-jobs 2 \
-    --sampler random --pruner median
+.. image:: ../_static/img/Matplotlib1.png
 
 
-Colab Notebook: Try it Online!
-------------------------------
+Scikit
+~~~~~~~~~~~~~~~~~~~~~~~~
+Source : `https://www.datacamp.com/community/blog/scikit-learn-cheat-sheet#gs.fZ2A1Jk <https://www.datacamp.com/community/blog/scikit-learn-cheat-sheet#gs.fZ2A1Jk>`_ 
 
-You can train agents online using Google `colab notebook <https://colab.research.google.com/github/Stable-Baselines-Team/rl-colab-notebooks/blob/master/rl-baselines-zoo.ipynb>`_.
+.. image:: ../_static/img/Scikit1.png
+
+Source : `http://peekaboo-vision.blogspot.de/2013/01/machine-learning-cheat-sheet-for-scikit.html <http://peekaboo-vision.blogspot.de/2013/01/machine-learning-cheat-sheet-for-scikit.html>`_ 
+
+.. image:: ../_static/img/Scikit2.png
+
+Tensorflow
+~~~~~~~~~~~~~~~~~~~~~~~~
+Source : `https://www.kaggle.com/getting-started/134439 <https://www.kaggle.com/getting-started/134439>`_ 
+
+.. image:: ../_static/img/Tensorflow.jpg
 
 
-.. note::
+Probability
+~~~~~~~~~~~~~~~~~~~~~~~~
+Source : `http://www.wzchen.com/s/probability_cheatsheet.pdf <http://www.wzchen.com/s/probability_cheatsheet.pdf>`_ 
 
-	You can find more information about the rl baselines zoo in the repo `README <https://github.com/araffin/rl-baselines-zoo>`_. For instance, how to record a video of a trained agent.
+.. image:: ../_static/img/Probability.png
+
+Linear Algebra
+~~~~~~~~~~~~~~~~~~~~~~~~
+Source : https://minireference.com/static/tutorials/linear_algebra_in_4_pages.pdf <https://minireference.com/static/tutorials/linear_algebra_in_4_pages.pdf`_ 
+
+.. image:: ../_static/img/LinearAlgebra.png
+
+Calculus
+~~~~~~~~~~~~~~~~~~~~~~~~
+Source : `http://tutorial.math.lamar.edu/getfile.aspx?file=B,41,N <http://tutorial.math.lamar.edu/getfile.aspx?file=B,41,N>`_ 
+
+.. image:: ../_static/img/Calculus.png
+
+Statistics
+~~~~~~~~~~~~~~~~~~~~~~~~
+Source : `http://web.mit.edu/~csvoss/Public/usabo/stats_handout.pdf <http://web.mit.edu/~csvoss/Public/usabo/stats_handout.pdf>`_ 
+
+.. image:: ../_static/img/Stats.png

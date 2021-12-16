@@ -16,6 +16,9 @@ Kernel Principal Component Analysis
    not line‐ arly separable. We would then need to apply KPCA to
    separate the components.
 
+   .. image:: ../_static/img/fig7-3.png
+   
+
    *Figure 7-3. Kernel PCA*
 
    Implementation

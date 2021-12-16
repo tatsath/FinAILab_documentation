@@ -17,7 +17,9 @@ Reinforcement Learning
    model is trained with the correct answers available. In reinforcement
    learning, there is no explicit answer. The learning
 
-   |image5|\ system (agent) decides what to do to perform the given task
+   .. image:: ../_static/img/fig1.6.png
+
+   system (agent) decides what to do to perform the given task
    and learns whether that was a correct action based on the reward. The
    algorithm determines the answer key through its experience.
 

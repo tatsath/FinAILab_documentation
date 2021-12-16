@@ -26,14 +26,16 @@ Regression
    response variable (outcome or target), and we try to find a
    relationship between those variables that allows us to predict an
    outcome.
-
-   |image2|\ An example of regression versus classification is shown in
+   
+   .. image:: ../_static/img/fig1.3.jpg
+   
+   
+   An example of regression versus classification is shown in
    `Figure 1-3 <#_bookmark42>`__. The chart on the left shows an example
    of regression. The continuous response variable is return, and the
    observed values are plotted against the predicted outcomes. On the
    right, the outcome is a categorical class label, whether the market
    is bull or bear, and is an example of classification.
-   .. figure:: img/fig1.1.png
    
          
       

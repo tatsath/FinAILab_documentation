@@ -1,5 +1,6 @@
 .. _rr:
 
+
 Regularized Regression
 ----------------------
 
@@ -18,7 +19,7 @@ Regularized Regression
    to build a model with higher prediction accuracy and interpretation.
    Regularized regres‐ sion has two advantages over linear regression:
 
-   *Prediction accuracy*
+   **Prediction accuracy**
 
    The performance of the model working better on the testing data
    suggests that the model is trying to generalize from training data. A
@@ -27,7 +28,7 @@ Regularized Regression
    we trade off the ability to fit complex models (higher bias) for a
    more generalizable model (lower variance).
 
-   *Interpretation*
+   **Interpretation**
 
    A large number of predictors may complicate the interpretation or
    communica‐ tion of the big picture of the results. It may be
@@ -63,9 +64,11 @@ Regularized Regression
    the sklearn package of Python, as shown in the code snippet that
    follows:
 
-   from sklearn.linear_model import Lasso model = Lasso()
-
-   model.fit(X, Y)
+   .. code-block:: python
+   
+      from sklearn.linear_model import Lasso 
+      model = Lasso()
+      model.fit(X, Y)
 
    *L2 regularization or Ridge regression*
 
@@ -95,11 +98,13 @@ Regularized Regression
    the sklearn package of Python, as shown in the code snippet that
    follows:
 
-   from sklearn.linear_model import Ridge model = Ridge()
+   .. code-block:: python
+   
+      from sklearn.linear_model import Ridge 
+      model = Ridge()
+      model.fit(X, Y)
 
-   model.fit(X, Y)
-
-   *Elastic net*
+   **Elastic net**
 
    *Elastic nets* add regularization terms to the model, which are a
    combination of both L1 and L2 regularization, as shown in the
@@ -118,10 +123,12 @@ Regularized Regression
    An elastic net regression model can be constructed using the
    ElasticNet class of the sklearn package of Python, as shown in the
    following code snippet:
-
-   from sklearn.linear_model import ElasticNet model = ElasticNet()
-
-   model.fit(X, Y)
+   
+   .. code-block:: python
+   
+      from sklearn.linear_model import ElasticNet 
+      model = ElasticNet()
+      model.fit(X, Y)
 
    For all the regularized regression, *λ* is the key parameter to tune
    during grid search in Python. In an elastic net, *α* can be an

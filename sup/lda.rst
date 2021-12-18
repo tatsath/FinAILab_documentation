@@ -6,7 +6,7 @@ Linear Discriminant Analysis
    The objective of the *linear discriminant analysis* (LDA) algorithm
    is to project the data onto a lower-dimensional space in a way that
    the class separability is maximized and the variance within a class
-   is minimized.\ `4 <#_bookmark234>`__
+   is minimized.
 
    During the training of the LDA model, the statistical properties
    (i.e., mean and cova‐ riance matrix) of each class are computed. The
@@ -31,16 +31,18 @@ Implementation in Python and hyperparameters
    The LDA classification model can be constructed using the sklearn
    package of Python, as shown in the following code snippet:
 
-   from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-   model = LinearDiscriminantAnalysis()
-
-   model.fit(X, Y)
+   .. code-block:: python
+   
+      from sklearn.discriminant_analysis 
+      import LinearDiscriminantAnalysis
+      model = LinearDiscriminantAnalysis()
+      model.fit(X, Y)
 
    The key hyperparameter for the LDA model is number of components for
-   dimen‐ sionality reduction, which is represented by n_components in
+   dimensionality reduction, which is represented by n_components in
    sklearn.
 
-   Advantages and disadvantages
+Advantages and disadvantages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
    In terms of advantages, LDA is a relatively simple model with fast

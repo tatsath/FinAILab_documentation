@@ -28,5 +28,9 @@ The loss function is essentially a mean squared error (MSE) function, where
 ′
 predicted value. θ are the weights of the network, which are computed when the loss function is minimized. Both the target and the current estimate depend on the set of weights, underlining the distinction from supervised learning, in which targets are fixed prior to training.
 An example of the DQN for the trading example containing buy, sell, and hold actions is represented in Figure 9-6. Here, we provide the network only the state (s)  as input, and we receive Q-values for all possible actions (i.e., buy, sell, and hold) at once. 
+
+.. image:: ../_static/img/fig9-6.png
+
+
 Figure 9-6. DQN
 

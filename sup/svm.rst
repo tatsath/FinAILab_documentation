@@ -49,15 +49,17 @@ Support Vector Machine
 
    Regression
 
-   from sklearn.svm import SVR model = SVR()
-
-   model.fit(X, Y)
+   .. code-block:: python
+   
+      from sklearn.svm import SVR model = SVR()
+      model.fit(X, Y)
 
    Classification
 
-   from sklearn.svm import SVC model = SVC()
-
-   model.fit(X, Y)
+   .. code-block:: python
+   
+      from sklearn.svm import SVC model = SVC()
+      model.fit(X, Y)
 
 .. _hyperparameters-2:
 

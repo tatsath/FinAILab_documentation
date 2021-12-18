@@ -11,14 +11,12 @@ K-Nearest Neighbors
 
    To determine which of the *K* instances in the training dataset are
    most similar to a new input, a distance measure is used. The most
-   popular distance measure is *Eucli‐*
+   popular distance measure is *Eucli*
 
    *dean distance*, which is calculated as the square root of the sum of
-   the squared differ‐ ences between a point *a* and a point *b* across
+   the squared differences between a point *a* and a point *b* across
    all input attributes *i*, and which is represented as *d* (*a*, *b*)
-   = ∑\ *n* (*a* – *b* )2. Euclidean distance is a good distance meas‐
-
-   ure to use if the input variables are similar in type.
+   = ∑\ *n* (*a* – *b* )2. Euclidean distance is a good distance measure to use if the input variables are similar in type.
 
    Another distance metric is *Manhattan distance*, in which the
    distance between point
@@ -39,21 +37,23 @@ K-Nearest Neighbors
 ..
 
    KNN regression and classification models can be constructed using the
-   sklearn pack‐ age of Python, as shown in the following code:
+   sklearn package of Python, as shown in the following code:
 
    Classification
 
-   from sklearn.neighbors import KNeighborsClassifier model =
-   KNeighborsClassifier()
-
-   model.fit(X, Y)
+   .. code-block:: python
+      
+      from sklearn.neighbors import KNeighborsClassifier 
+      model = KNeighborsClassifier()
+      model.fit(X, Y)
 
    Regression
 
-   from sklearn.neighbors import KNeighborsRegressor model =
-   KNeighborsRegressor()
-
-   model.fit(X, Y)
+   .. code-block:: python
+      
+      from sklearn.neighbors import KNeighborsRegressor 
+      model = KNeighborsRegressor()
+      model.fit(X, Y)
 
 .. _hyperparameters-3:
 
@@ -83,9 +83,7 @@ Advantages and disadvantages
    In terms of advantages, no training is involved and hence there is no
    learning phase. Since the algorithm requires no training before
    making predictions, new data can be added seamlessly without
-   impacting the accuracy of the algorithm. It is intuitive and
-
-   easy to understand. The model naturally handles multiclass
+   impacting the accuracy of the algorithm. It is intuitive and easy to understand. The model naturally handles multiclass
    classification and can learn complex decision boundaries. KNN is
    effective if the training data is large. It is also robust to noisy
    data, and there is no need to filter the outliers.

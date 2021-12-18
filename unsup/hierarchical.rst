@@ -79,12 +79,15 @@ Implementation in Python
    The following code snippet illustrates how to apply agglomerative
    hierarchical clus‐ tering with four clusters on a dataset:
 
-   from sklearn.cluster import AgglomerativeClustering
+   .. code-block:: python
+   
+      
+      from sklearn.cluster import AgglomerativeClustering
 
-   model = AgglomerativeClustering(n_clusters=4, affinity='euclidean',\\
-   linkage='ward')
+      model = AgglomerativeClustering(n_clusters=4, affinity='euclidean',\\
+      linkage='ward')
 
-   clust_labels1 = model.fit_predict(X)
+      clust_labels1 = model.fit_predict(X)
 
    More details regarding the hyperparameters of agglomerative
    hierarchical clustering can be found on the `sklearn

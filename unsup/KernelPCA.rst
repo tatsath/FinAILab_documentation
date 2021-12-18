@@ -4,16 +4,15 @@ Kernel Principal Component Analysis
 -----------------------------------
 
    A main limitation of PCA is that it only applies linear
-   transformations. Kernel princi‐ pal component analysis (KPCA) extends
+   transformations. Kernel principal component analysis (KPCA) extends
    PCA to handle nonlinearity. It first maps the original data to some
    nonlinear feature space (usually one of higher dimension). Then it
    applies PCA to extract the principal components in that space.
 
-   |image39|\ A simple example of when KPCA is applicable is shown in
-   `Figure 7-3 <#_bookmark522>`__. Linear trans‐ formations are suitable
+   Linear transformations are suitable
    for the blue and red data points on the left-hand plot. However, if
    all dots are arranged as per the graph on the right, the result is
-   not line‐ arly separable. We would then need to apply KPCA to
+   not linearly separable. We would then need to apply KPCA to
    separate the components.
 
    .. image:: ../_static/img/fig7-3.png
@@ -28,10 +27,8 @@ Kernel Principal Component Analysis
    kpca = KernelPCA(n_components=4, kernel='rbf').fit_transform(X)
 
    In the Python code, we specify kernel='rbf', which is the `radial
-   basis function ker‐ <https://oreil.ly/zCo-X>`__
-   `nel <https://oreil.ly/zCo-X>`__. This is commonly used as a kernel
-   in machine learning techniques, such as in SVMs (see `Chapter
-   4 <#Chapter_4._Supervised_Learning:_Models_a>`__).
+   basis function kernel. This is commonly used as a kernel
+   in machine learning techniques, such as in SVMs.
 
    Using KPCA, component separation becomes easier in a higher
    dimensional space, as mapping into a higher dimensional space often
@@ -60,4 +57,6 @@ t-distributed Stochastic Neighbor Embedding
 
    Implementation
 
-   from sklearn.manifold import TSNE X_tsne = TSNE().fit_transform(X)
+   .. code-block:: python
+   
+      from sklearn.manifold import TSNE X_tsne = TSNE().fit_transform(X)

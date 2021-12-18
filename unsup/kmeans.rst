@@ -77,11 +77,14 @@ Implementation in Python
    *k*-means. The following code snippet illustrates how to apply
    *k*-means clustering on a dataset:
 
-   from sklearn.cluster import KMeans
+   .. code-block:: python
+   
+      
+      from sklearn.cluster import KMeans
 
-   *#Fit with k-means*
+      *#Fit with k-means*
 
-   k_means = KMeans(n_clusters=nclust) k_means.fit(X)
+      k_means = KMeans(n_clusters=nclust) k_means.fit(X)
 
    The number of clusters is the key hyperparameter to be tuned. We will
    look at the *k*- means clustering technique in case studies 1 and 2

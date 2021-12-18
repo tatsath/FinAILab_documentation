@@ -26,10 +26,11 @@ Linear Regression (Ordinary Least Squares)
 Implementation in Python
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-   from sklearn.linear_model import LinearRegression model =
-   LinearRegression()
-
-   model.fit(X, Y)
+   .. code-block:: python
+   
+      from sklearn.linear_model import LinearRegression 
+      model = LinearRegression()
+      model.fit(X, Y)
 
    In the following section, we cover the training of a linear
    regression model and grid search of the model. However, the overall
@@ -39,23 +40,20 @@ Implementation in Python
 Training a model
 ~~~~~~~~~~~~~~~~
 
-   As we mentioned in `Chapter
-   3 <#Chapter_3._Artificial_Neural_Networks>`__, training a model
-   basically means retrieving the model parameters by minimizing the
+   Training a model basically means retrieving the model parameters by minimizing the
    cost (loss) function. The two steps for training a linear regression
    model are:
 
    *Define a cost function (or loss function)*
 
    Measures how inaccurate the model’s predictions are. The *sum of
-   squared residu‐ als (RSS)* as defined in `Equation
+   squared residuals (RSS)* as defined in `Equation
    4-1 <#_bookmark196>`__ measures the squared sum of the difference
    between the actual and predicted value and is the cost function for
    linear regression.
 
    *Equation 4-1. Sum of squared residuals*
 
-   *n n* 2
 
    *RSS* = ∑ (*y\ i* – *β*\ :sub:`0` – ∑ *β\ j x\ ij*)
 
@@ -109,11 +107,13 @@ Grid search
    for this model. If set to False, no intercept will be used in
    calculations:
 
-   model = LinearRegression()
+   .. code-block:: python
+   
+      model = LinearRegression()
 
-   param_grid = {'fit_intercept': [True, False]}
+      param_grid = {'fit_intercept': [True, False]}
 
-   }
+   
 
    The second step is to instantiate the GridSearchCV object and provide
    the estimator object and parameter grid, as well as a scoring method
@@ -124,10 +124,12 @@ Grid search
 
    With all settings in place, we can fit GridSearchCV:
 
-   grid = GridSearchCV(estimator=model, param_grid=param_grid, scoring=
-   'r2', \\ cv=kfold)
-
-   grid_result = grid.fit(X, Y)
+   .. code-block:: python
+   
+   
+      grid = GridSearchCV(estimator=model, param_grid=param_grid, scoring=
+      'r2', \\ cv=kfold)
+      grid_result = grid.fit(X, Y)
 
 Advantages and disadvantages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~

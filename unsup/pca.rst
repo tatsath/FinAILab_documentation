@@ -1,7 +1,5 @@
 .. _pca:
 
-.. automodule:: stable_baselines.acer
-
 
 Principal Component Analysis
 ----------------------------
@@ -20,20 +18,20 @@ Principal Component Analysis
    target dimensionality.
 
    The PCA algorithm works by projecting the original data onto the
-   principal compo‐ nent space. It then identifies a sequence of
+   principal component space. It then identifies a sequence of
    principal components, each of which aligns with the direction of
-   maximum variance in the data (after accounting for var‐ iation
+   maximum variance in the data (after accounting for variation
    captured by previously computed components). The sequential
    optimization also ensures that new components are not correlated with
    existing components. Thus the resulting set constitutes an orthogonal
    basis for a vector space.
 
-    The decline in the amount of variance of the original data
+   The decline in the amount of variance of the original data
    explained by each principal component reflects the extent of
    correlation among the original features. The number of components
    that capture, for example, 95% of the original variation relative to
    the total number of features provides an insight into the linearly
-   independent informa‐ tion of the original data. In order to
+   independent information of the original data. In order to
    understand how PCA works, let’s consider the distribution of data
    shown in `Figure 7-1 <#_bookmark513>`__.
 
@@ -47,9 +45,7 @@ Principal Component Analysis
    center of the coordinate system from the original point *(0, 0)* to
    the center of the distribution of data points. It will then move the
    x-axis into the principal axis of variation, which is the one with
-   the
-
-   most variation relative to data points (i.e., the direction of
+   the most variation relative to data points (i.e., the direction of
    maximum spread). Then it moves the other axis orthogonally to the
    principal one, into a less important direction of variation.
 
@@ -63,7 +59,7 @@ Principal Component Analysis
    *Figure 7-2. PCA-2*
 
    These new directions that contain the maximum variance are called
-   principal compo‐ nents and are orthogonal to each other by design.
+   principal components and are orthogonal to each other by design.
 
    There are two approaches to finding the principal components: *Eigen
    decomposition*
@@ -101,25 +97,31 @@ Eigen decomposition
 
    Implementation
 
-   *# Import PCA Algorithm*
+   .. code-block:: python
+   
+         
+      *# Import PCA Algorithm*
 
-   from sklearn.decomposition import PCA
+      from sklearn.decomposition import PCA
 
-   *# Initialize the algorithm and set the number of PC's*
+      *# Initialize the algorithm and set the number of PC's*
 
-   pca = PCA(n_components=2) *# Fit the model to data* pca.fit(data)
+      pca = PCA(n_components=2) *# Fit the model to data* pca.fit(data)
 
    *# Get list of PC's*
 
    pca.components\_
 
-   *# Transform the model to data*
+   .. code-block:: python
+   
+         
+      *# Transform the model to data*
 
-   pca.transform(data)
+      pca.transform(data)
 
-   *# Get the eigenvalues*
+      *# Get the eigenvalues*
 
-   pca.explained_variance_ratio
+      pca.explained_variance_ratio
 
    There are additional items, such as *factor loading*, that can be
    obtained using the functions in the sklearn library. Their use will
@@ -146,7 +148,7 @@ Singular value decomposition
    components as column vectors.
 
    As shown above, both Eigen decomposition and SVD tell us that using
-   PCA is effec‐ tively looking at the initial data from a different
+   PCA is effectively looking at the initial data from a different
    angle. Both will always give the same answer; however, SVD can be
    much more efficient than Eigen decomposition, as it is able to handle
    sparse matrices (those which contain very few nonzero elements). In
@@ -155,8 +157,8 @@ Singular value decomposition
 
    *Truncated SVD* is a variant of SVD that computes only the largest
    singular values, where the number of computes is a user-specified
-   parameter. This method is differ‐ ent from regular SVD in that it
-   produces a factorization where the number of col‐ umns is equal to
+   parameter. This method is different from regular SVD in that it
+   produces a factorization where the number of columns is equal to
    the specified truncation. For example, given an *n* × *n* matrix, SVD
    will produce matrices with *n* columns, whereas truncated SVD will
    produce matrices with a specified number of columns that may be less
@@ -164,8 +166,10 @@ Singular value decomposition
 
    Implementation
 
-   from sklearn.decomposition import TruncatedSVD svd =
-   TruncatedSVD(ncomps=20).fit(X)
+   .. code-block:: python
+   
+      from sklearn.decomposition import TruncatedSVD svd =
+      TruncatedSVD(ncomps=20).fit(X)
 
    In terms of the weaknesses of the PCA technique, although it is very
    effective in reducing the number of dimensions, the resulting

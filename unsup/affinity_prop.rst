@@ -39,11 +39,14 @@ Implementation in Python
    The following code snippet illustrates how to implement the affinity
    propagation algorithm for a dataset:
 
-   from sklearn.cluster import AffinityPropagation
+   .. code-block:: python
+   
+   
+      from sklearn.cluster import AffinityPropagation
 
-   *# Initialize the algorithm and set the number of PC's*
+      *# Initialize the algorithm and set the number of PC's*
 
-   ap = AffinityPropagation() ap.fit(X)
+      ap = AffinityPropagation() ap.fit(X)
 
    More details regarding the hyperparameters of affinity propagation
    clustering can be found on the `sklearn

@@ -71,66 +71,62 @@ must be specified as a parameter to the algorithm.
 As the bagged decision trees are constructed, we can calculate how
 much the error function drops for a variable at each split point. In
 regression problems, this may be the drop in sum squared error, and
-in classification, this might be the Gini cost. The
+in classification, this might be the Gini cost. The  bagged method can provide feature importance by calculating and
+averaging the error function drop for individual variables.
 
-5. Bias and variance are described in detail later in this chapter.
+**Implementation in Python.** Random forest regression and
+classification models can be constructed using the sklearn package of
+Python, as shown in the following code:
 
-..
+Classification
 
-   bagged method can provide feature importance by calculating and
-   averaging the error function drop for individual variables.
-
-   **Implementation in Python.** Random forest regression and
-   classification models can be constructed using the sklearn package of
-   Python, as shown in the following code:
-
-   Classification
-
-   from sklearn.ensemble import RandomForestClassifier model =
-   RandomForestClassifier()
-
+.. code-block:: python
+   
+   from sklearn.ensemble import RandomForestClassifier 
+   model = RandomForestClassifier()
    model.fit(X, Y)
 
-   Regression
+Regression
 
-   from sklearn.ensemble import RandomForestRegressor model =
-   RandomForestRegressor()
-
+.. code-block:: python
+   
+   from sklearn.ensemble import RandomForestRegressor 
+   model = RandomForestRegressor()
    model.fit(X, Y)
 
-   **Hyperparameters.** Some of the main hyperparameters that are
-   present in the sklearn implementation of random forest and that can
-   be tweaked while performing the grid search are:
+**Hyperparameters.** Some of the main hyperparameters that are
+present in the sklearn implementation of random forest and that can
+be tweaked while performing the grid search are:
 
-   *Maximum number of features (*\ max_features *in sklearn)*
+*Maximum number of features (*\ max_features *in sklearn)*
 
-   This is the most important parameter. It is the number of random
-   features to sample at each split point. You could try a range of
-   integer values, such as 1 to 20, or 1 to half the number of input
-   features.
+This is the most important parameter. It is the number of random
+features to sample at each split point. You could try a range of
+integer values, such as 1 to 20, or 1 to half the number of input
+features.
 
-   *Number of estimators (*\ n_estimators *in sklearn)*
+*Number of estimators (*\ n_estimators *in sklearn)*
 
-   This parameter represents the number of trees. Ideally, this should
-   be increased until no further improvement is seen in the model. Good
-   values might be a log scale from 10 to 1,000.
+This parameter represents the number of trees. Ideally, this should
+be increased until no further improvement is seen in the model. Good
+values might be a log scale from 10 to 1,000.
 
-   **Advantages and disadvantages.** The random forest algorithm (or
-   model) has gained huge popularity in ML applications during the last
-   decade due to its good performance, scalability, and ease of use.
-   It is flexible and naturally assigns feature importance scores, so
-   it can handle redundant feature columns. It scales to large datasets
-   and is generally robust to overfitting. The algorithm doesn’t need
-   the data to be scaled and can model a nonlinear relationship.
+**Advantages and disadvantages.** The random forest algorithm (or
+model) has gained huge popularity in ML applications during the last
+decade due to its good performance, scalability, and ease of use.
+It is flexible and naturally assigns feature importance scores, so
+it can handle redundant feature columns. It scales to large datasets
+and is generally robust to overfitting. The algorithm doesn’t need
+the data to be scaled and can model a nonlinear relationship.
 
-   In terms of disadvantages, random forest can feel like a black box
-   approach, as we have very little control over what the model does,
-   and the results may be difficult to interpret. Although random forest
-   does a good job at classification, it may not be good for regression
-   problems, as it does not give a precise continuous nature predic‐
-   tion. In the case of regression, it doesn’t predict beyond the range
-   in the training data and may overfit datasets that are particularly
-   noisy.
+In terms of disadvantages, random forest can feel like a black box
+approach, as we have very little control over what the model does,
+and the results may be difficult to interpret. Although random forest
+does a good job at classification, it may not be good for regression
+problems, as it does not give a precise continuous nature predic‐
+tion. In the case of regression, it doesn’t predict beyond the range
+in the training data and may overfit datasets that are particularly
+noisy.
 
 Extra trees
 ~~~~~~~~~~~
@@ -161,17 +157,19 @@ Extra trees
 
    Classification
 
-   from sklearn.ensemble import ExtraTreesClassifier model =
-   ExtraTreesClassifier()
-
-   model.fit(X, Y)
+   .. code-block:: python
+   
+      from sklearn.ensemble import ExtraTreesClassifier 
+      model = ExtraTreesClassifier()
+      model.fit(X, Y)
 
    Regression
 
-   from sklearn.ensemble import ExtraTreesRegressor model =
-   ExtraTreesRegressor()
-
-   model.fit(X, Y)
+   .. code-block:: python
+   
+      from sklearn.ensemble import ExtraTreesRegressor 
+      model = ExtraTreesRegressor()
+      model.fit(X, Y)
 
 Adaptive Boosting (AdaBoost)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -184,25 +182,24 @@ Adaptive Boosting (AdaBoost)
    increases the weights of the wrongly predicted instances and
    decreases the ones of the correctly predicted instances.
 
-6. Split is the process of converting a nonhomogeneous parent node into
-   two homogeneous child nodes (best possible).
+   .. note:: Split is the process of converting a nonhomogeneous parent node into two homogeneous child nodes (best possible).
 
-..
+
 
    The steps of the AdaBoost algorithm are:
 
-7.  Initially, all observations are given equal weights.
+1.  Initially, all observations are given equal weights.
 
-8.  A model is built on a subset of data, and using this model,
+2.  A model is built on a subset of data, and using this model,
     predictions are made on the whole dataset. Errors are calculated by
     comparing the predictions and actual values.
 
-9.  While creating the next model, higher weights are given to the data
+3.  While creating the next model, higher weights are given to the data
     points that were predicted incorrectly. Weights can be determined
     using the error value. For instance, the higher the error, the more
     weight is assigned to the observation.
 
-10. This process is repeated until the error function does not change,
+4. This process is repeated until the error function does not change,
     or until the maximum limit of the number of estimators is reached.
 
 ..
@@ -212,18 +209,20 @@ Adaptive Boosting (AdaBoost)
    shown in the following code snippet:
 
    Classification
-
-   from sklearn.ensemble import AdaBoostClassifier model =
-   AdaBoostClassifier()
-
-   model.fit(X, Y)
+   
+   .. code-block:: python
+   
+      from sklearn.ensemble import AdaBoostClassifier 
+      model = AdaBoostClassifier()
+      model.fit(X, Y)
 
    Regression
-
-   from sklearn.ensemble import AdaBoostRegressor model =
-   AdaBoostRegressor()
-
-   model.fit(X, Y)
+   
+   .. code-block:: python
+   
+      from sklearn.ensemble import AdaBoostRegressor 
+      model = AdaBoostRegressor()
+      model.fit(X, Y)
 
    **Hyperparameters.** Some of the main hyperparameters that are
    present in the sklearn implementation of AdaBoost and that can be
@@ -292,16 +291,18 @@ Gradient boosting method
 
    Classification
 
-   from sklearn.ensemble import GradientBoostingClassifier model =
-   GradientBoostingClassifier()
-
+   .. code-block:: python
+   
+   from sklearn.ensemble import GradientBoostingClassifier 
+   model = GradientBoostingClassifier()
    model.fit(X, Y)
 
    Regression
 
-   from sklearn.ensemble import GradientBoostingRegressor model =
-   GradientBoostingRegressor()
-
+   .. code-block:: python
+   
+   from sklearn.ensemble import GradientBoostingRegressor 
+   model = GradientBoostingRegressor()
    model.fit(X, Y)
 
    **Advantages and disadvantages.** In terms of advantages, gradient

@@ -103,17 +103,19 @@ Implementation in Python
 
    Classification
 
-   from sklearn.tree import DecisionTreeClassifier model =
-   DecisionTreeClassifier()
+   .. code-block:: python
 
-   model.fit(X, Y)
+      from sklearn.tree import DecisionTreeClassifier 
+      model = DecisionTreeClassifier()
+      model.fit(X, Y)
 
    Regression
 
-   from sklearn.tree import DecisionTreeRegressor model =
-   DecisionTreeRegressor ()
+   .. code-block:: python
 
-   model.fit(X, Y)
+      from sklearn.tree import DecisionTreeRegressor 
+      model = DecisionTreeRegressor ()
+      model.fit(X, Y)
 
 .. _hyperparameters-4:
 
